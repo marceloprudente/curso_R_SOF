@@ -1,0 +1,366 @@
+---
+title: "Lendo Dados Com R"
+author: "Marcelo Augusto Prudente Lima"
+date: "13 de dezembro de 2017"
+output:
+  pdf_document:
+    highlight: tango
+  
+---
+
+### Porque usar o R
+
+* É uma ferramenta aberta (de graça)
+* É possível abrir ínumeros bancos de dados ao mesmo tempo
+* Ao sair do programa, todos os dados, modelos e scripts são salvos
+* Excelentes gráficos sem muito trabalho
+* Faz análises de dados e estatísticas facilmente
+
+
+### Instalação do R
+
+Os arquivos necessários para instalar o R estão disponíveis gratuitamente no sítio oficial http://www.r-project.org/. 
+
+Lá você encontrará todas as instruções de instalação, tutoriais e outras informações relevantes. 
+
+Porém, antes de fazer a instalação, vale ressaltar que o uso do R não é necessariamente melhor diretamente pela linha de comando do programa. O uso dos "ambientes de desenvolvimento integrado" (IDE) tornam a interação com o programa muito mais útil e eficiente. 
+Por isso, além de instalar o R, recomendamos a instalação do *R Studio* por meio do site http://www.rstudio.org. Esse IDE utiliza o R já instalado e apresenta os códigos e resultados em uma mesma aplicação. Vale à pena testar os dois programas e verificar as diferenças entre eles. 
+
+### Encontrando os pacotes do R
+
+A natureza aberta do R  significa que o desenvolvimento de novas funções pode ocorrer ao longo do caminho. Hoje, há pouco mais de 12.000 pacotes disponíveis na página do CRAN (Comprehensive R Archive Network), cada um contendo diversas funções. 
+
+O modo mais comum de instalar os pacotes do R é por meio da função install.packages. A título de exemplo, vamos instalar o pacote *dplyr*, que utilizaremos com frequência neste curso
+
+```{r eval=FALSE}
+install.packages("dplyr")
+
+```
+
+Se você tiver problemas para instalar o pacote, você pode utilizar a seguinte abordagem:
+```{r eval=FALSE}
+install.packages("dplyr", type = "source")
+```
+
+Outro modo de instalar pacotes do R é por meio do GitHub. O Git é uma ferramenta de manejo de "códigos":
+
+``` {r eval = FALSE, highlight = TRUE}
+library(devtools)
+install_github("lodown")
+
+
+```
+Caso não funcione:
+```{r eval=FALSE}
+library(httr)
+set_config(config(ssl_verifypeer = 0L))
+install.packages("Rcpp")
+library(devtools)
+install_github( "ajdamico/lodown" , dependencies = TRUE )
+```
+
+### Dados no R
+
+Vamos começar nossa interação com R introduzindo dados no diretamente por meio do teclado. Usualmente, utilizamos o símbolo de atribuição **<-**. No entanto, podemos utlizar outras formas de abordagem. Vejamos:
+
+```{r }
+x1 <- c(1, 2, 3, 4)
+x1
+
+x2 = c(1, 2, 3, 4)
+x2
+
+assign("x3", c(1, 2, 3, 4))
+
+(nomes <- c("João", "Mariana", 'José'))
+
+
+(dados_logicos <- c(TRUE, FALSE, T, F)) 
+
+```
+
+Podemos notar que, nos três casos, utilizamos a seta "<-" para indicar as variáveis às quais atribuimos os dados. Vale notar que alternativamente podemos utilizar o símbolo **"="** ou mesmo a função **assign() ** para atribuir os dados às nossas variáveis. 
+
+Embora possamos utilizar indistintamente as três formas de atribuição, é comum especificar apenas **<-** no processo de atribuição das variáveis, ao invés do **=**. Isso torna mais clara a distinção entre a atribuição e as operações matemáticas. 
+
+Entender a atribuição é uma lição importante. Afinal, caso não façamos, o programa não irá gravar os valores especificados - eles serão apenas exibidos no console.
+
+### Informações Básicas do trabalho com o R
+
+Após aprendermos a fazer a atribuição básica, algumas dicas são preciosas para quem irá trabalhar com linhas de comando. 
+
+Em primeiro lugar, devemos estar atentos à organização e aos comentários. A leitura dos códigos pode ser bastante confusa no dia a dia. Por isso, é sempre preferível colocar espaços entre as operações executadas. Por exemplo, a leitura deste código é confusa:
+
+```{r}
+x1<-c(1,2,3,4,6,7,9)
+```
+
+Assim há mais clareza:
+```{r}
+x1<- c(1, 2, 3, 4, 6, 7, 9)
+```
+
+Outra dica preciosa refere-se a forma de nomear as variáveis. Os nomes dos objetos não devem começar com números e devem evitar o uso de vírgulas, espaços ou acentos na sua construção. Tente atribuir variáveis com os nomes abaixo:
+
+```{r error=TRUE}
+
+123variável
+```
+```{r error=TRUE}
+minha variável
+```
+
+Por convenção, a forma de escrever nomes de variáveis e funções é o [**snake_case**](https://en.wikipedia.org/wiki/Snake_case). Mas ainda é possível utilizar pontos ou mesmo o [Camel Case](https://en.wikipedia.org/wiki/Camel_case).
+
+
+`usando_snake_case`
+
+`GRITANDO_COM_SNAKE_CASE`
+
+`usando.pontos`
+
+`UsandoCamelCase`
+
+
+Devemos prestar bastante atenção à forma de criar as variáveis. É importante evitar nomes muito grandes. Além disso, devemos ficar atentos pois o R é sensível a MAIÚSCULAS e minúsculas, bem como retorna apenas a variável exatamente como gravada. 
+
+Melhor Evitar:
+```{r}
+minha_variavel_tem_um_nome_grande <- 1
+```
+Atenção às MAIÚSCULAS e minúsculas:
+
+```{r}
+VARIAVEL<- c(1, 3, 5, 7)
+variavel<- c(2, 4, 6, 8)
+``` 
+Não encontraremos os números pares caso digitemos **VARIAVEL** ou os ímpares se digitarmos **variavel**. Embora as duas tenham o mesmo nome, seus conteúdos são claramente distintos. Ainda, o programa retornará um erro se digitarmos **Variavel**, com a primeira letra maiúscula. Vamos tentar ver o que ocorre?
+
+
+```{r error = TRUE}
+variavel # números pares
+VARIAVEL # número ímpares
+
+Variavel # Mensagem de Erro
+```
+
+##### Atalhos
+o R Studio oferece uma série de de atalhos de teclado. Você pode acessá-los por meio do  **Alt+Shift+K**.
+
+##### Informações do espaço de trabalho
+
+Podemos verificar todos os objetos do nosso espaço de trabalho por meio de dois comandos:
+```{r}
+objects()
+ls()
+```
+
+##### Deletando informações
+
+Você pode remover os objetos listados de forma individual...
+```{r}
+rm(variavel)
+```
+ 
+...ou poderá remover toda a lista de objetos de uma vez:
+
+
+```{r}
+rm(list = ls())
+```
+
+##### Diretórios de Trabalho
+
+## Vetores
+
+O R trabalha com estruturas de dados. A estrutura de dados mais simples é o vetor, que é uma sequência de elementos de dados do mesmo tipo (ou seja, os dados são homogêneos: por exemplo, numéricos, textuais ou lógicos) com apenas uma dimensão.
+
+Os vetores tem três propriedades comuns: 
+* Tipo, que pode ser acessado pela função typeof()
+* Comprimento, que indica quantos elementos tem o vetor, caracterizado pela função length() 
+* Atributos, capturados pela função attributes() cujo objetivo é informar metadados do vetor
+
+Além das propriedades, os vetores assumem quatro tipos: 
+
+* Logical
+* Character
+
+números inteiros, 
+*double* (numéricos) e o textual. 
+
+Para entendermos melhor o que são os vetores,  Com isso, criaremos alguns vetores e entenderemos sua natureza. 
+
+
+
+
+Assim, vamos introduzir alguns dados e atribuir nomes a eles:
+
+```{r }
+# Dados numéricos
+numero <- c(1, 2, 3, 4, 5, 6, 7, 8)
+numero
+
+# Dados em Texto
+texto <- c("João", "Mariana", 'José')
+
+# Dados Lógicos
+dados_logicos <- c(TRUE, FALSE, T, F)
+
+```
+
+Do exercício acima é possível extrair algumas lições fundamentais. 
+
+
+Além disso, é possível notar que quando colocamos toda a atribuição em parênteses, não é necessário executar a variável para que ela seja exposta no **console**. Essa é uma boa forma de verificar o que estamos fazendo em tempo real.
+
+Por fim, uma importante distinção é ressaltada. Os dados de cada uma das variáveis têm tipos distintos: numérico, character e lógico. 
+
+No primeiro caso, afirmamos que temos dados numéricos.Mas como saber realmente se eles são numéricos? 
+
+```{r}
+# Podemos conferir a classe do vetor x1
+class(numero)
+# Ou mesmo perguntar se o objeto x1 é numerico com a função "is.numeric()"
+is.numeric(numero) # retorna um valor lógico
+# Ainda, por ser um vetor, podemos saber seu comprimento
+length(numero)
+```
+Vejamos que poderíamos ter uma situação diferente.
+```{r}
+x2<- c(1, 2, "a", 4)
+class(x2)
+is.numeric(x2)
+```
+
+Como observamos que **x1** é de fato numérico, podemos executar operações matemáticas com esse vetor. Por exemplo, podemos somar todo o vetor por um número ou tirar a raiz quadrada dele. 
+
+```{r}
+# Como é um numéro, podemos fazer operações matemáticas
+numero+10
+```
+
+
+Em seguida, especificamos um novo vetor com dados de texto (**character**). O texto pode ser um nome, uma frase, um parágrafo. Será lido, pois, como texto. 
+
+Todavia, como texto, os valores não assumem uma ordem específica ou mesmo podem ser contados. Para isso, podemos transformar dados em fatores (**factor**). Os fatores são vetores que contém dados predefinidos e categóricos. Assim, um vetor da classe ("class()") fator tem comportamento distindo dos dados numéricos e possuem níveis ("levels()").
+
+```{r}
+# Vamos gerar uma lista maior de nomes
+nomes<- c("João", "Mariana", "José", "José", "José", "Mariana")
+class(nomes)
+is.character(nomes) # retorna um valor lógico
+
+# Transformamos os nomes em fator com a função "as.factor()"
+nomes2<- as.factor(nomes)
+class(nomes2)
+is.character(nomes2) # retorna um valor lógico
+is.factor(nomes2) # retorna um valor lógico
+
+```
+
+Ao transformar os nomes em fator, podemos extrair informações relevantes:
+
+```{r}
+length(nomes2) # comprimento do vetor
+levels(nomes2) # níveis do vetor
+table(nomes2) # a tabela indica o número de observações por nível
+```
+
+Agora, vamos aprender a gerar sequências regulares para produzirmos vetores maiores.
+
+```{r}
+# Variável numérica: repetir 5  três vezes
+rep(5, 3)
+
+# Agora, vamos repetir uma sequência de números.
+(x1<- rep(c(1, 2, 3, 4), 5))
+
+# Repetir o intervalo de 1 a 4 
+rep(1:4, 4:1)
+
+# Repetir o intervalo de 1 a 4 - duas vezes cada número
+rep(c(1, 2, 3, 4), each=2)
+
+# Para os números, também podemos criar sequencias
+1:10 # sequência simples
+
+seq(1, 100, by = 2.5) # sequencia por critérios distintos
+
+# Podemos fazer o mesmo com variáveis de texto
+(lai <- rep(c("publico", "sigiloso"), c(10, 10)))
+
+(lai <- rep(c("publico", "sigiloso"), each=10))  # equivalente
+
+# 
+(orgao <- rep(rep(c("orgão A", "autarquia z"), each=5), 2))
+
+l<- seq
+
+ 
+
+```
+
+
+### Transformando a classe vetores atômicos (coercion)
+
+```{r}
+as.numeric(dados_logicos)
+as.integer(dados_logicos)
+as.double(dados_logicos)
+
+as.character(dados_logicos)
+
+as.factor(dados_logicos)
+
+as.numeric("texto")
+
+```
+
+
+
+```{r echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+s<- c("+", "-", "/", "*", "^", "sqrt", "log", "sum", "max", "min", "mean")
+s1<- c("Soma", "Subtração", "Divisão", "Multiplicação", "Potência", "Raiz Quadrada", "Logarítmo", "Soma", "Máximo", "Mínimo", "Média")
+s2<- data.frame(s, s1)
+colnames(s2)<- c("Símbolo", "Operação")
+
+kable(s2)%>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  
+```
+
+
+Porém, muitas vezes não concluimos os comandos. 
+
+```{r}
+1+2
+2-5
+5/8
+8*20
+5^2
+sqrt(20)
+log(20)
+
+```
+
+Além disso, podemos utilizar a função *scan*, que lê os dados digitados um a um. Vamos tentar dessa forma:
+```{r}
+#Scan lerá uma quantidade de dados colocados. Para finalizar a introdução dos dados, acrescentar uma linha em branco e digitar ENTER. 
+exemplo <- scan()
+
+# Descrever os dados
+exemplo
+```
+
+
+
+### Quadro de Dados (Data Frame)
+
+O dataframe é uma lista de vetores (variáveis) em que todos os elementos tem o mesmo número de linhas (mesmo tamanho). Os valores nele inclusos tem o aspecto de uma matriz no qual as colunas podem assumir diferentes tipos de classes (logical, character, integer, double ou factor). Em geral, os bancos de dados que utilizamos são dataframes. Conhecer bem a natureza dos seus vetores nos auxilia bastante na análise dos dados.
+
+
+
+Porém essa não parece ser a forma mais eficiente de introduzir dados. Com o R, é possível acrescentar informações de forma padronizada, repetindo a operação caso necessário com a função *rep*. 
