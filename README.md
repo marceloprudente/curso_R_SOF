@@ -1,2 +1,2 @@
-# Curso R - SOF
-Curso de R para Analistas da Secretaria de Orçamento Federal - Fevereiro e Março de 2018
+# Curso R - ENAP/SOF
+Curso Manuseio de Bases de Dados do Governo Federal no Software R -  Março e Abril de 2018
