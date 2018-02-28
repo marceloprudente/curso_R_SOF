@@ -1,0 +1,82 @@
+ano;UNIDADE_FEDERACAO;estado;regiao;pop_estadual
+1991;11;Rondônia;Norte;1120423
+1991;12;Acre;Norte;425114
+1991;13;Amazonas;Norte;2045692
+1991;14;Roraima;Norte;191381
+1991;15;Pará;Norte;4863833
+1991;16;Amapá;Norte;284282
+1991;17;Tocantins;Norte;904011
+1991;21;Maranhão;Nordeste;4891095
+1991;22;Piauí;Nordeste;2551981
+1991;23;Ceará;Nordeste;6286479
+1991;24;Rio Grande do Norte;Nordeste;2386528
+1991;25;Paraíba;Nordeste;3170153
+1991;26;Pernambuco;Nordeste;7062643
+1991;27;Alagoas;Nordeste;2480741
+1991;28;Sergipe;Nordeste;1475207
+1991;29;Bahia;Nordeste;11714211
+1991;31;Minas Gerais;Sudeste;15533276
+1991;32;Espírito Santo;Sudeste;2572188
+1991;33;Rio de Janeiro;Sudeste;12646302
+1991;35;São Paulo;Sudeste;31145220
+1991;41;Paraná;Sul;8337123
+1991;42;Santa Catarina;Sul;4477849
+1991;43;Rio Grande do Sul;Sul;9010612
+1991;50;Mato Grosso do Sul;Centro Oeste;1747852
+1991;51;Mato Grosso;Centro Oeste;1979014
+1991;52;Goiás;Centro Oeste;3953924
+1991;53;Distrito Federal;Centro Oeste;1553351
+2000;11;Rondônia;Norte;1358391
+2000;12;Acre;Norte;560286
+2000;13;Amazonas;Norte;2761956
+2000;14;Roraima;Norte;316461
+2000;15;Pará;Norte;6096382
+2000;16;Amapá;Norte;469730
+2000;17;Tocantins;Norte;1138389
+2000;21;Maranhão;Nordeste;5600373
+2000;22;Piauí;Nordeste;2815794
+2000;23;Ceará;Nordeste;7358965
+2000;24;Rio Grande do Norte;Nordeste;2750087
+2000;25;Paraíba;Nordeste;3418067
+2000;26;Pernambuco;Nordeste;7852240
+2000;27;Alagoas;Nordeste;2788543
+2000;28;Sergipe;Nordeste;1764277
+2000;29;Bahia;Nordeste;12912885
+2000;31;Minas Gerais;Sudeste;17713430
+2000;32;Espírito Santo;Sudeste;3068242
+2000;33;Rio de Janeiro;Sudeste;14252079
+2000;35;São Paulo;Sudeste;36605277
+2000;41;Paraná;Sul;9443479
+2000;42;Santa Catarina;Sul;5295633
+2000;43;Rio Grande do Sul;Sul;10075935
+2000;50;Mato Grosso do Sul;Centro Oeste;2040077
+2000;51;Mato Grosso;Centro Oeste;2433020
+2000;52;Goiás;Centro Oeste;4938223
+2000;53;Distrito Federal;Centro Oeste;2010067
+2010;11;Rondônia;Norte;1547340
+2010;12;Acre;Norte;728621
+2010;13;Amazonas;Norte;3460786
+2010;14;Roraima;Norte;445981
+2010;15;Pará;Norte;7524479
+2010;16;Amapá;Norte;664168
+2010;17;Tocantins;Norte;1373825
+2010;21;Maranhão;Nordeste;6547088
+2010;22;Piauí;Nordeste;3102750
+2010;23;Ceará;Nordeste;8403309
+2010;24;Rio Grande do Norte;Nordeste;3151547
+2010;25;Paraíba;Nordeste;3744722
+2010;26;Pernambuco;Nordeste;8744595
+2010;27;Alagoas;Nordeste;3092405
+2010;28;Sergipe;Nordeste;2054721
+2010;29;Bahia;Nordeste;13933016
+2010;31;Minas Gerais;Sudeste;19471119
+2010;32;Espírito Santo;Sudeste;3492255
+2010;33;Rio de Janeiro;Sudeste;15895914
+2010;35;São Paulo;Sudeste;40944102
+2010;41;Paraná;Sul;10379794
+2010;42;Santa Catarina;Sul;6211295
+2010;43;Rio Grande do Sul;Sul;10618328
+2010;50;Mato Grosso do Sul;Centro Oeste;2420664
+2010;51;Mato Grosso;Centro Oeste;3008275
+2010;52;Goiás;Centro Oeste;5962448
+2010;53;Distrito Federal;Centro Oeste;2543802
