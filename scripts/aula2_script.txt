@@ -1,0 +1,346 @@
+# Aula 2 ----
+
+
+# DICA: acessar atalhos no R
+# alt + shift + k (atalho para os atalhos)
+# ou Tools, Keyboard shortcut help
+
+# Exemplo 1 ----
+
+## Numérico contínuo
+num_dbl <- c(1, 2.8, 4.5, 6.3)
+
+## Numérico discreto
+num_int = c(1L, 3L, 5L, 7L) 
+
+## Lógico
+log_vt <- c(TRUE, FALSE, TRUE, FALSE) 
+
+## Texto
+chr_vt <- c("João", "Zezinha", "Itamar", "Cristiane" )
+
+
+# testes para os vetores
+length(num_dbl)
+is.vector(num_dbl)
+is.numeric(num_dbl)
+is.integer(num_dbl)
+is.atomic(num_dbl)
+is.double(num_dbl)
+typeof(num_dbl)
+
+
+# Compelir vetores a classes
+as.character(1:10)
+
+as.numeric(c(T, T, T, F, F, T))
+
+as.integer(c(1.5, 1.6, 1.7, 1.8))
+
+
+# Exercício 1 ----
+# Criar os próprios vetores
+
+
+# factor
+letras <- c("a", "b", "c", "a", "c", "c", "d", "e", "e", "e", "e")
+levels(letras)
+as.factor(letras)
+table(letras)
+
+# Exercício 2 ----
+## básico
+1 + 2
+2 - 5
+5 / 8
+8 * 20
+5 ^ 2
+
+# precedência dos parênteses
+(25+(37*8)^1/2)/12
+
+25+((37*8)^1/2)/12
+
+## Logaritmo
+log(100) # logarítmo natural
+log(100, base=10) # logarítimo base-10
+log10(100) # equivalente
+log(100, b=10)  # abreviação do argumento
+
+## Raiz Quadrada
+sqrt(144) # raiz quadrada
+144^(1/2) # mesmo
+
+## Valor Absoluto
+abs(-50)
+
+## Exponencial
+exp(10)
+
+## com vetores
+x <- 1:20
+x^2
+x^1/2
+x^x
+
+# equacao 1
+(x + x^2 + 2)*3
+
+# equacao 2
+2*x + 3*x^2 + x^3 + 2
+
+## Operações matemáticas com vetores lógicos
+logico <- c(T, F, F, T, T, F, F)
+sum(logico)
+mean(logico)
+log(logico)
+sqrt(logico)
+logico * 5
+(logico * 6 )^4
+
+# Exercício 3 ----
+x<- c(1, 3, 4, 4, 5, 4, 8, 12, 11, 10, 7, 9)
+mes_inicial <- c(1, 1, 1, 2, 6, 6, 6, 8, 8, 8, 8, 8)
+mes_final <- c(12, 12, 12, 12, 10, 10, 10, 10, 9, 9, 9, 9)
+
+# quantos casos de x pertencem a mes_inicial
+sum( x == mes_inicial)
+
+# quantos casos de x pertencem a mes_final
+sum( x == mes_final)
+
+# em quais casos o valor de x é maior que o mes final
+x > mes_inicial
+x > mes_final
+
+# em quais casos não são iguais
+x != mes_inicial
+x != mes_inicial
+
+# Exercício 4 ----
+## operações com conjuntos
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+y <- c(6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
+
+# uniao
+union(x, y)
+
+# intercessão
+intersect(x, y)
+
+# diferença entre conjuntos
+setdiff(x, y)
+setdiff(y, x)
+setdiff(x,c(1, 2))
+
+# igualdade
+setequal(x, y)
+
+# é elemento?
+is.element(x, y)
+is.element(y, x)
+
+# pertence (funcao muito util)
+x %in% y
+y %in% x
+
+1 %in% x
+x %in% 1
+
+nome <- c("Pedro", "Maria", "Joaquina")
+
+# joaquina pertence ao conjunto nomes?
+"Joaquina" %in% nome
+
+# quais elementos do conjunto "nome" contém joaquina?
+nome %in% "Joaquina"
+
+# é possível somar os resultados
+sum(nome %in% c("Joaquina", "Pedro"))
+
+###########################
+# Sequencias e repeticoes #
+###########################
+?seq
+?rep
+# forma básica
+1:10
+seq(from = 1, to = 10)
+
+# sequencia por regras
+seq(from = 1, to = 10, by = 2.5 )
+seq(1, 10, 2.5) # resumido
+
+# como temos objetos, podemos fazer o seguinte
+n <- 1000
+t <- 7.5
+seq(1, n, t)
+
+# repeticoes
+rep(5, 10)
+
+rep(c(5, 4), 10, each = 2)
+
+# repetir sequencia
+rep(2000:2002, 2)
+
+# repetir a mesma sequencia 
+rep(2000:2002, 2, each = 3)
+
+# repetir sequencia 1 vez 
+rep(seq(2000, 2010, 1), each = 4)
+
+# repetir texto
+fruta <- c("laranja", "banana", "manga", 
+           "maracujá", "mamão", "ameixa")
+
+rep(fruta, 15)
+rep(fruta, each = 2)
+rep(fruta, c(1, 2, 3, 4, 5, 6))
+rep(fruta, 1:6)
+rep(fruta, rep(c(2,3), 3))
+
+############
+# Matrizes #
+############
+matriz_a <- matrix(1:12, nrow = 4, ncol = 3)
+matriz_a
+dim(matriz_a)
+
+matriz_b <- matrix(1:12, nrow = 3, ncol = 4)
+matriz_b
+dim(matriz_b)
+
+# transformar vetor em matriz
+vetor_b <- 1:12
+class(vetor_b)
+dim(vetor_b) # não tem dimensão pois é vetor
+
+# qual a dimensao do vetor
+?dim
+# então
+dim(vetor_b)<- c(3, 4)
+vetor_b
+class(vetor_b)
+
+# nomes das colunas e linhas matrizes
+ncol(vetor_b)
+nrow(vetor_b)
+
+rownames(vetor_b) <- c("linha 1", "linha 2", "linha 3")
+colnames(vetor_b) <- c("col 1", "col2", 'col3', "col4")  
+
+vetor_b
+
+##########
+# Listas #
+##########
+
+lista<- list(x = 1:5, 
+             "Curso de R", 
+             c(TRUE, FALSE), 
+             c(1.5, 1.6, 1.7, 1.8),
+             matriz = matrix(1:12, 3, 4), 
+             lista2 =list(letters, LETTERS))
+
+lista
+# pede a estrutura da lista
+str(lista)
+
+# ver elementos da lista
+
+lista[1]
+lista[2]
+lista[6]
+
+# é possível utilizar dois [[ para acessar elementos individuais da lista
+
+lista[[6]][1]
+lista[[6]][2]
+
+# o mesmo pode ser obtido com o $
+lista$lista2[1]
+lista$lista2[2]
+
+##############
+# Data Frame #
+##############
+df <- data.frame(nome =c("Josias", "Joaldo", "Josefa", 
+                         "Josie", "Josimar"),
+                 idade = c(42, 28, 34, 27, 55),
+                 tem_filhos= c(TRUE, FALSE, FALSE, 
+                               TRUE, TRUE))
+print(df)
+
+
+## Data Frame: acessando elementos com o $
+df$idade
+df$nome
+df$tem_filhos
+
+## Data Frame: acessando seus elementos com os []
+df[ , ] # todo data.frame
+df[1, ] # linha 1
+df[ , 2] # coluna 2
+df[ 1, 2] # linha 1, coluna 2
+
+
+## estrutura
+str(df)
+
+# média
+mean(df$idade)
+sum(df$idade)/5
+# mediana
+median(df$idade)
+# maximo
+max(df$idade)
+
+# minimo
+min(df$idade)
+
+# log
+log(df$idade)
+
+quantile(df$idade)
+
+
+## Data Frame: adicionando elementos
+df$qtd_filhos <- c(3, 4, 1, 3, 6)
+
+# se voce tentar colocar mais elementos que o banco, dará erro
+df$qtd_filhos2 <- 1:10
+
+# mas é possível colocar números unicos
+df[, 5] <- 5
+df[, "seis"] <- 6
+
+
+
+# Exercicio em sala
+# verificar dados já existentes no R
+data()
+
+# selecionar mpg
+library(ggplot2)
+mpg <- mpg
+mpg
+
+# Exercicio com mpg ----
+# qual a classe de mpg
+class(mpg)
+
+# estrutura dos dados
+str(mpg)
+
+## extrair elementos
+# coluna 1
+mpg[1]
+# linha 1
+mpg[1, ]
+# coluna 1
+mpg[, 1]
+
+
+# linha 2, coluna 2
+mpg[2, 2]
