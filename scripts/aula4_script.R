@@ -1,15 +1,15 @@
-# Aula 4 - ManipulaÁ„o de Dados
+# Aula 4 - Manipula√ß√£o de Dados
 
 # carregar biblioteca
 library(tidyverse)
 
-# fixar diretÛrio
+# fixar diret√≥rio
 setwd("C:/curso_r_enap/dados/")
 
 # listar arquivos
 list.files()
 
-# ler arquivo dados sociais - separador decimal È vÌrgula
+# ler arquivo dados sociais - separador decimal √© v√≠rgula
 dados_sociais <- ("dados_sociais.csv", dec = ",")
 
 dados_sociais <- read_csv2("dados_sociais.csv", 
@@ -19,7 +19,7 @@ dados_sociais <- read_csv2("dados_sociais.csv",
 str(dados_sociais)
 
 #######################
-# comeÁando pelo pipe #
+# come√ßando pelo pipe #
 #######################
 x = c(1.555, 2.555, 3.555, 4.555)
 
@@ -29,7 +29,7 @@ log(x)
 # mesma coisa com o pipe
 x %>% log()
 
-# vc pode ir alÈm!
+# vc pode ir al√©m!
 x %>% log() %>% round(2) # UAU!
 
 #############################
@@ -41,7 +41,7 @@ x %>% log() %>% round(2) # UAU!
 dados_sociais %>% 
   filter( ano == 2000 | ano == 2010)
 
-# filtar pop acima da mÈdia
+# filtar pop acima da m√©dia
 dados_sociais %>%
   filter(pop > mean(pop))
 
@@ -54,11 +54,11 @@ dados_sociais %>%
 dados_sociais %>% 
   select(ano:municipio)
 
-# seleciona todas vari·veis, exceto municÌpio
+# seleciona todas vari√°veis, exceto munic√≠pio
 dados_sociais %>% 
   select(-municipio)
 
-# seleciona as vari·veis uf e tx_analf_15m
+# seleciona as vari√°veis uf e tx_analf_15m
 minha_selecao <- c("uf", "tx_analf_15m")
 dados_sociais %>% 
   select(minha_selecao)
@@ -75,7 +75,7 @@ dados_sociais %>%
 dados_sociais %>% 
   select(cod_ibge:rdpc, ano:uf)
 
-# reordena apenas 1 vari·vel.
+# reordena apenas 1 vari√°vel.
 dados_sociais %>% 
   select(cod_ibge, everything())
 
@@ -97,7 +97,7 @@ dados_sociais %>%
   arrange(-ano, pop) %>%
   head(5)
 
-# mostra apenas os 5 ˙ltimos
+# mostra apenas os 5 √∫ltimos
 dados_sociais %>% 
   arrange(-ano, pop) %>%
   tail(5)
@@ -113,12 +113,12 @@ dados_sociais %>%
          log_pop = log(pop))
 
 # summarise ----
-# mÈdia esp_vida por ano
+# m√©dia esp_vida por ano
 dados_sociais %>% 
   group_by(ano) %>% # agrupa por ano
   summarise(media = mean(esp_vida))
 
-# mÈdia esp_vida por ano e uf
+# m√©dia esp_vida por ano e uf
 dados_sociais %>% 
   group_by(ano, uf) %>% # agrupa por ano
   summarise(media = mean(esp_vida))
@@ -134,19 +134,19 @@ df2 <- tibble(letras = letters[5:12], Y = 1:8)
 # inner join
 # apenas os dados em comum
 inner_join(df1, df2)
-# idÍntico, mas preferÌvel!
+# id√™ntico, mas prefer√≠vel!
 inner_join(df1, df2, by = "letras")
 
-# junÁ„o total
+# jun√ß√£o total
 df_na <- full_join(df1, df2, by = "letras")
 
-# junÁ„o ‡ esquerda
+# jun√ß√£o √† esquerda
 left_join(df1, df2, by = "letras")
 
-# junÁ„o ‡ direita
+# jun√ß√£o √† direita
 right_join(df1, df2, by = "letras")
 
-# dados n„o coincidentes
+# dados n√£o coincidentes
 anti_join(df1, df2, by ="letras")
 anti_join(df2, df1, by ="letras")
 
@@ -179,7 +179,7 @@ fies_dist <- fies_sub %>%
   distinct(CO_CONTRATO_FIES, .keep_all = TRUE)
 
 ## round ----
-# gerar uma distribuiÁ„o normal aleatÛria
+# gerar uma distribui√ß√£o normal aleat√≥ria
 x <- rnorm(10, 5, 1)
 # Arredondar
 round(x)
@@ -195,11 +195,11 @@ ceiling(x)
 floor(x)
 
 # any ----
-# algum elemento do banco "df_na" È NA?
+# algum elemento do banco "df_na" √© NA?
 any(is.na(df_na))
-# A coluna letras do banco "df_na" È NA?
+# A coluna letras do banco "df_na" √© NA?
 any(is.na(df_na$letras))
-# A coluna letras do banco "df_na" contÈm a letra E?
+# A coluna letras do banco "df_na" cont√©m a letra E?
 any(df_na == "E")
 
 # cut ----
@@ -208,18 +208,18 @@ d <- tibble( id = seq(1:100),
 d$idade_cut <- cut(d$idade, seq(0,100, 5))
 
 # paste ----
-# irm„os Peixoto
-irmaos <- c("Edgar", "EdclÈsia", "Edmar", "EdÈsia", "EdÈsio")
+# irm√£os Peixoto
+irmaos <- c("Edgar", "Edcl√©sia", "Edmar", "Ed√©sia", "Ed√©sio")
 
 # como colocar os sobrenomes?
 paste(irmaos, "Peixoto")
 
-# paste0 - sem espaÁo
+# paste0 - sem espa√ßo
 paste0(irmaos, "Peixoto")
 
 
 
-# ifelse(): seleÁ„o condicional ----
+# ifelse(): sele√ß√£o condicional ----
 tib <- tibble( x = seq(0L, 30L, 2L), y = LETTERS[1:16])
 tib$x1 <- ifelse(tib$x >15, "Maior do que 10", "Menor do que 10")
 tib$x2 <- ifelse(tib$x >15, tib$x^2, tib$x)
@@ -230,7 +230,7 @@ tib$x2 <- ifelse(tib$x >15, tib$x^2, tib$x)
 
 # bind_rows - juntar linhas
 
-# extrair linhas especÌficas
+# extrair linhas espec√≠ficas
 um  <-  dados_sociais[1:4, ]
 dois <- dados_sociais[7011:7014, ]
 
@@ -252,26 +252,27 @@ df_na <- tibble( letras = LETTERS[1:10],
                  idade =  c( seq(25L, 40L, 5L), NA,
                              NA, 32L, rep(NA, 3)))
 
-# È possÌvel saber se um vetor È NA
+# √© poss√≠vel saber se um vetor √© NA
 is.na(df_na)
-# TambÈm È possÌvel remover esses valores
+# Tamb√©m √© poss√≠vel remover esses valores
 na.omit(df_na)
 
 # replace_na
-# Substituindo NAs por n˙meros
+# Substituindo NAs por n√∫meros
 replace_na(df_na, list(idade = 0))
 
 # Substituindo NAs por textos
-replace_na(df_na, list(idade = "Idade n„o informada"))
+replace_na(df_na, list(idade = "Idade n√£o informada"))
 
 #############
 # lubridade #
+#############
 
-# ano, mÍs e dia sem separador
+# ano, m√™s e dia sem separador
 ymd("20180131")
-# mÍs, dia e ano com separador "-"
+# m√™s, dia e ano com separador "-"
 mdy("01-31-2018")
-# dia, mÍs e ano com separador "/"
+# dia, m√™s e ano com separador "/"
 dmy("31/01/2018")
 
 # criar um vetor de datas
