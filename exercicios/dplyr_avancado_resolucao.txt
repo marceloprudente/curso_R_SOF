@@ -1,0 +1,182 @@
+# resolução exercício dplyr avançado
+# pacotes necessários
+library(data.table)
+library(dplyr)
+library(lubridate)
+
+# especificar diretórios
+setwd("C:/dados")
+
+# listar arquivos
+list.files()
+
+# os arquivos são mto grande, vamos ler as primeiras lihnas
+bf <- fread("201501_BolsaFamiliaFolhaPagamento.csv", dec = ",", 
+            nrows = 3)
+str(bf)
+
+
+########################## 
+# baixando bolsa familia #
+##########################
+
+### DUAS FORMAS DE BAIXAR
+## FORMA 1
+# com read_tsv(), pois o delimitador é "\t"
+bf <- read_tsv("201501_BolsaFamiliaFolhaPagamento.csv",
+               locale = locale(encoding = "Latin1"))
+
+## FORMA 2
+# Cadastros do Bolsa família de Janeiro de 2015
+bf <- fread("201501_BolsaFamiliaFolhaPagamento.csv", 
+            dec =",")
+# objeto muito grande. veja!
+bf_size <- object.size(bf)
+print(bf_size, units = "auto")
+
+# queremos apenas o NIS - coluna 8 e 12
+colnames(bf) 
+bf<- fread("201501_BolsaFamiliaFolhaPagamento.csv", 
+           dec =",", select = c(8, 12))
+bf_size <- object.size(bf)
+print(bf_size, units = "auto")
+
+########################## 
+# baixando seguro defeso #
+##########################
+
+# listar arquivo
+list.files()
+
+# baixar arquivo
+pesc<- read_tsv("201501_SeguroDefeso.csv", locale = locale(encoding = "latin1"))
+
+# estrutura do banco
+str(pesc)
+# ler primeiras linhas
+head(pesc)
+
+
+#################
+# adequar nomes #
+#################
+
+# Função para editar nomes
+adequar_nomes<- function(x){
+  require(stringr)
+  require(stringi)
+  x = stri_trans_general(x, "Latin-ASCII")
+  x = tolower(x)
+  x = str_replace_all(x, "[[:punct:][:space:]]", "_")
+}
+
+# Adequar nomes do cadastro do Bolsa Família
+colnames(bf)<- adequar_nomes(colnames(bf))
+
+# Adequar nomes do banco Pescador Artesanal
+colnames(pesc)<- adequar_nomes(colnames(pesc))
+
+
+#######################
+# trabalhar com datas #
+#######################
+x <- "01/2015"
+x <- paste0("01/", x)
+
+## primeiro, ajeitar a data de referência
+pesc$data_referencia <- 
+  paste0("01/",pesc$data_referencia)
+
+x <- dmy(pesc$data_referencia)
+class(x)
+
+x <- pesc %>% mutate(data_referencia = dmy(data_referencia))
+class(x$data_referencia)
+remove(x)
+
+
+a <- colnames(select(pesc, contains("data")))
+pesc<- pesc %>% mutate_at(.vars = a, funs(dmy))
+
+
+
+##########################################
+# calcular o número de bolsas por cidade #
+##########################################
+## dados população
+library(readxl)
+pop <- read_excel("pop_2015.xls")
+str(pop)
+
+# adequar nomes
+colnames(pop) <- adequar_nomes(colnames(pop))
+
+# 
+str(pop)
+
+# criar nova variavel
+pop <- pop %>% 
+  mutate(cod_ibge = paste0(cod__uf, cod__munic))
+
+# o código ibge tem 7 números, mas precisamos cortar 6
+pop$cod_ibge <- as.numeric(substr(pop$cod_ibge, 1, 6))
+
+# equivalente
+pop <- pop%>%
+  mutate(cod_ibge = as.numeric(substr(pop$cod_ibge, 1, 6)))
+
+
+
+# primeiro passo: contar o número de casos
+t <- pesc %>% 
+  distinct(pis_pescador, .keep_all = T) %>%
+  group_by(codigo_ibge_municipio_pescador) %>%
+  count()
+
+sem_keep <- pesc %>% 
+  distinct(pis_pescador)
+
+com_keep <- pesc %>% 
+  distinct(pis_pescador, .keep_all = T)
+
+# juntar as bases
+t <- inner_join(t, pop, 
+                by = c("codigo_ibge_municipio_pescador" = "cod_ibge"))
+
+# calcular percentual
+t<- t%>% 
+  mutate(percentual = (n/populacao_estimada)*100)
+
+# de forma direta
+t <- inner_join(t, pop, by = c("codigo_ibge_municipio_pescador" = "cod_ibge")) %>%
+  mutate(percentual = (n/populacao_estimada)*100) %>%
+  arrange(desc(percentual))
+
+
+##########################
+# analisar seguro defeso #
+##########################
+
+# todas variaveis sao relevantes?
+head(pesc)
+
+# excluir as que não interessam
+pesc <- pesc %>% 
+  select(-c(numero_requerimento, cpf_pescador, numero_rgp, 
+            nome_municipio_pescador, codigofuncao:codigoacao))
+
+# há linhas repetidas?
+pesc <- pesc %>% 
+  mutate(pis_dup = duplicated(pis_pescador))
+
+# contar duplicados
+pesc %>% summarise(unicos = n_distinct(pis_pescador), 
+                   duplicados = sum(pis_dup))
+
+## transformar pis e nis em numericos, caso não sejam numéricos
+class(bf$nis_favorecido)
+bf$nis_favorecido <- as.numeric(bf$nis_favorecido)
+
+class(pesc$pis_pescador)
+pesc$pis_pescador <- as.numeric(pesc$pis_pescador)
+
