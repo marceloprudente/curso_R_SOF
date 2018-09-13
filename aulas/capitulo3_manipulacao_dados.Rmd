@@ -1,0 +1,907 @@
+---
+title: "3 - Manipulação de Dados no R"
+author: "Marcelo Prudente"
+date: "17 de setembro de 2018"
+output: 
+  pdf_document: 
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
+header-includes:
+    - \usepackage{setspace}\onehalfspacing
+fontsize: 12pt
+documentclass: report
+---
+
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\chaptername}{Seção}
+\renewcommand{\listtablename}{Quadro}
+\renewcommand{\tablename}{Quadro}
+\renewcommand{\contentsname}{Sumário}
+
+# Manipulação de dados
+
+
+A manipulação de dados demanda um bom tempo de qualquer analista de dados. Remover colunas, criar colunas, fundir tabelas, renomear variáveis, sumarizar variáveis, entre outros, são tarefas comuns bastante facilitadas pelo programa.
+
+
+No **R** há diversas formas de manipular dados por meio de diversos pacotes. Podemos elencar, por exemplo, o pacote **base**, já instalado no sistema, o pacote **dplyr** do **tidyverse** ou o pacote **data.table**. Na prática, todos tem o mesmo objetivo, mas a sintaxe a performance são distintas. 
+
+Para esse curso, daremos grande ênfase à abordagem do **dplyr**, cuja linguagem é próxima a do SQL, por sua facilidade, disseminação e performance. Se o nosso objetivo fosse trabalhar intensivamente com bases grandes, daríamos ênfase ao **data.table**, mas caso você queira entender melhor essa forma de manipular dados recomendo acessar [**este link**](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html). 
+
+No entanto, o objetivo deste tópico também é apresentar algumas estratégias importantes para a manipulação dos dados com o pacote **base**. Afinal, é muito comum observar nos fóruns o uso da sintaxe desse pacote e, assim, é necessário conhecê-la. Ainda, essa pequena introdução à manipulação dos dados tem por objetivo explicitar a lógica por trás da linguagem do **R**. Assim, identificaremos as formas alternativas de trabalho.
+
+Portanto, os comandos aprendidos nesta aula trazem "massa crítica" para as aulas seguintes.
+Para isso, a partir do banco **dados_sociais.csv**, vamos levantar algumas questões recorrentes na análise de dados.
+
+**Qual o primeiro passo? Ler os dados!**     
+```{r warning=FALSE, message=FALSE}
+# limpar ambiente global
+rm(list = ls())
+# carregar pacotes
+library(data.table); library(readr)
+# com fread
+dados_sociais <- fread("C:/curso_r/dados/dados_sociais.csv", dec = ",")
+
+# com read_csv2 - sep = ";" e dec = ","
+dados_sociais <- read_csv2("C:/curso_r/dados/dados_sociais.csv",
+                           locale = locale(encoding = "latin1"))
+```
+  
+## Como estão os meus dados
+Com os dados carregados, devemos gastar nossa energia em conhecer os dados para promover as mudanças necessárias (desejadas).
+
+O primeiro passo é olhar a nossa base de dados sociais e verificar se as estruturas de dados foram corretamente importadas.
+
+```{r warning= FALSE, message= FALSE}
+library(dplyr)
+glimpse(dados_sociais)
+
+```
+    
+Lembre-se que a manipulação permite melhorar a precisão dos dados analisados. Com o **R** é possível fazer isso de forma rápida e transparente, sobretudo em comparação ao uso de planilhas do Excel, por exemplo.
+
+
+## Manipulação de dados com o R
+Entre os mais de 12.000 pacotes do **R**, alguns foram especificamente desenhados para manipular dados e explorar os dados.
+
+Para as aulas, utilizaremos os pacotes do tidyverse:
+
+- *dplyr* - manipulação dos dados
+- *lubridate* - manipulação de datas
+- *reshape2* - pivotar dados
+- *tidyr* - pivotar dados
+- *ggplot2* - gráficos
+- Menção honrosa: *data.table()*
+
+
+# Manipulação de dados com dplyr
+
+O pacote *dplyr* é hoje um dos mais utilizados para a manipulação de dados por algumas razões:
+
+- sintaxe amigável (próxima à do SQL)
+- diversos tutoriais disponíveis (livros, artigos no Rpubs, discussões no stackoverflow)
+
+
+## Comandos básicos do dplyr
+
+Os seis mais importantes comandos (ou verbos) de manipulação de dados do *dplyr* são:
+
+1. filter()   - seleciona linhas
+2. select()   - seleciona colunas
+3. arrange()  - ordena os dados
+4. mutate()   - cria novas variáveis e renomeia
+5. group_by() - agrupa os dados
+6. summarise()- sumariza os dados
+
+Lembre desses comandos! Eles serão seus grandes amigos!!
+
+
+
+### filter (): filtrando as linhas
+
+Um dos problemas mais básicos da manipulação de dados é a necessidade de extrair subconjuntos dessas informações. Por exemplo, em dados segregados por Estado, você pode se interessar por analisar apenas essa unidade específica ou mesmo uma região (Nordeste ou Sul). Mas como implementar isso? Com o *dplyr*, essa é uma tarefa intuitiva, conforme o comando abaixo. Observe o uso do operador lógico da igualdade. 
+
+```{r eval = FALSE}
+# filtrar apenas informações do ano de 2010
+dados_2010 <-  filter(dados_sociais, ano == 2000)
+```
+
+A aborgagem do dplyr é simples, mas a sua contraparte da base do sistema também:
+
+```{r}
+
+dados_2010 <- subset(dados_sociais, ano == 2010)
+
+``` 
+
+Fácil, não?
+
+#### **Exercício** 
+
+Tente filtrar as linhas dos dados de tal forma que:
+- o ano seja 2010
+- a taxa de analfabetismo seja maior que a média
+- o Estado seja do Nordeste
+
+Dica: utilize os comandos lógicos e de medida aprendidos no capítulo 1. 
+
+## filter(): string
+É possível filtrar os dados que contenham textos. Nesse caso, utilizamos a função *grepl()*. Para maior informação, lembre-se sempre de olhar a documentação do comando ?grepl. 
+
+```{r}
+filter(dados_sociais, grepl("Araca", municipio, ignore.case = TRUE ))
+
+
+
+````
+
+## select(): selecionando as colunas
+
+Às vezes, não queremos filtrar as linhas, mas apenas selecionar algumas colunas, sobretudo quando estamos diante de bancos com muitas variáveis (+ 100). Mais uma vez, o *dplyr* oferece um comando intuitivo para esse tipo de esforço. Claro, para selecionar as colunas é necessário conhecer seus nomes.
+
+```{r eval = FALSE}
+# quais os nomes das colunas
+colnames(dados_sociais)
+
+# selecionar ano, uf e taxa de analfabetismo
+dados_select <- select(dados_sociais, ano, uf, tx_analf_15m )
+
+# olhar a nova base
+head(dados_select)
+```
+
+Note que o comando **subset()**, utilizado para filtrar linhas, também conta com uma opção *select*, conforme o código abaixo:
+
+```{r}
+dados_select <- subset(dados_sociais, select = c("ano", "uf", "tx_analf_15m"))
+head(dados_select)
+```
+
+Você deve estar se perguntando: qual a vantagem dos comandos do *dplyr* sobre o *subset*? Calma! Chegaremos lá. Antes, vamos a mais alguns exemplos.
+
+Com o comando select é possívelselecionar um intervalo de variáveis de acordo com seus nomes ou mesmo sua posição no banco.
+```{r eval= FALSE}
+# Selecionar as variáveis de nome até municípios
+dados_select <- select(dados_sociais, ano:municipio)
+
+# Selecionar as 4 primeiras variáveis pela posição
+dados_select <- select(dados_sociais, 1:4)
+
+```
+
+Da mesma forma, podemos excluir variáveis com muita facilidade
+
+```{r eval= FALSE}
+# Todas variáveis, exceto município
+dados_select <- select(dados_sociais, -municipio)
+```
+
+Ainda, como em qualquer operação do **R**, é possível criar um vetor com as variáveis que se quer selecionar.
+
+```{r eval = FALSE}
+# Selecionar as variáveis uf e tx_analf_15m
+minha_selecao <- c("uf", "tx_analf_15m")
+dados_select <- dados_sociais %>% select(one_of(minha_selecao))
+# mostrar o resultado
+head(dados_select)
+```
+
+Ainda, quem pode selecionar tem o poder de reordenar as colunas.
+
+```{r eval = FALSE}
+# Você pode reordenar grupos
+dados_select <- select(dados_sociais,  cod_ibge:rdpc, ano:uf)
+
+# Você pode reordenar apenas 1 variável - note o everything
+dados_select <- select(dados_sociais, cod_ibge, everything())
+
+```
+
+Atente: o **everything()** retorna todas outras variáveis do banco.
+
+## select(): select helpers
+Séries de funções que permitem selecionar os nomes das variáveis de acordo com os seus nomes.
+
+```{r warning=FALSE, message= FALSE}
+# ler dados datasus
+library(read.dbc)
+sihsus <- read.dbc("C:/curso_r/dados/RDSE1701.dbc")
+
+# nome das colunas 
+colnames(sihsus)
+
+# selecionar colunas que começam com VAL
+sihsus1 <- select(sihsus, starts_with("val"))
+head(sihsus1)
+# selecionar colunas que contém UTI
+sihsus2<- select(sihsus, contains("UTI"))
+head(sihsus2)
+
+```
+
+
+## Agora, devemos falar do pipe
+
+Uma das vantagens da aborgagem de manipulação de dados do *dplyr* é o pipe. Introduzido pelo pacote *magrittr*, O *pipe* (expresso pelo comando **%>%**) é uma ferramenta para expressar uma sequência de múltiplas operações com clareza. Em outras palavras, podemos encadear operações (e essa é uma vantagem relevante). 
+
+Mas como isso funciona? Basicamente, o pipe transforma **f(x)** em **x %>% y**.
+```{r eval= FALSE}
+library(magrittr)
+
+x = c(1.555, 2.555, 3.555, 4.555)
+# tirar o log de x 
+log(x)
+
+# mesma coisa com o pipe
+x %>% log()
+
+# vc pode ir além!
+x %>% log() %>% round(2) # UAU!
+```
+
+Como o **R** é uma linguagem funcional, o uso dos *pipes* ajuda a reduzir o número de parênteses nas funções e a deixar o código organizado. 
+Além disso. auxilia a leitura dos códigos da direita para a esquerda.
+Por fim, para a manipulação de dados a ser feita com o *dplyr*, o uso do *pipe* permite um acesso mais fácil às variáveis 
+
+Se aplicarmos filtros para as linhas e selecionarmos colunas com o *dplyr*, o código ficará assim:
+
+```{r}
+# esperança de vida nos municipios do Estado de Sergipe em 2010
+esp_vida_se_2010 <- dados_sociais %>%
+  filter(ano == 2010 & uf == 28) %>% 
+  select(municipio, esp_vida)
+head(esp_vida_se_2010, 4)
+
+```
+
+Assim, no código acima, o pipe indica a seleção da base dados_sociais, a qual se aplicará um filtro de linhas e serão selecionadas algumas colunas. Muito simples, não? A partir de agora, vamos utilizar sempre o pipe para a manipulação. 
+
+## mutate(): criar novas variáveis
+
+A criação de novas variáveis no *R* é bastante facilitada com o *dplyr*. Mostraremos a maneira dessa aborgagem em comparação à forma usual do sistema. 
+
+Com o banco de dados sociais, vamos calcular a renda total do município e o logarítimo da população. 
+
+```{r}
+# encontrar a renda total e logaritmo da populacao
+dados_sociais <- dados_sociais %>% 
+  mutate(renda_total = rdpc * pop,
+         log_pop = log(pop))
+# veja as novas colunas criadas
+head(dados_sociais, 2)
+colnames(dados_sociais)
+
+```
+
+Essa é uma abordagem muito mais concisa em relação à base do sistema, observe:
+
+```{r}
+# sintaxe verborrágica
+dados_sociais$renda_total <- dados_sociais$rdpc *dados_sociais$pop
+dados_sociais$log_pop <- log(dados_sociais$pop)
+
+```
+
+O mutate é um comando simples e é por meio dele que faremos a maior parte das nossas construções de variáveis. 
+
+
+## rename()
+Renomear variáveis pode ser um pequeno pesadela no R. O *dplyr* apresenta uma forma bastente simplificada para renomear variáveis do banco.
+
+```{r eval = FALSE}
+# Renomear ano e uf
+dados_sociais %>% 
+  rename(ANO = ano, 
+         UF = uf)
+
+```
+
+## summarise() e group_by(): agregar os dados
+Agora, suponha o seu interesse em identificar a média e mediana da esperança de vida dos municípios brasileiros para cada ano. Como fazer isso?
+
+Esse tipo de operação, em que agrupamos uma estatística por grupo, é muito comum e de fácil solução aqui. Devemos sempre perguntar: quero observar esse fenômeno sob qual nível de agregação? Pensando assim, fica fácil entender o comando abaixo.
+
+```{r }
+# agrupar por ano
+dados_sociais %>% # banco
+  group_by(ano) %>% # agrupa por ano
+  summarise(media = mean(esp_vida),
+            mediana = median(esp_vida))
+# agrupar por ano e uf
+dados_sociais %>% # banco
+  group_by(ano, uf) %>% # agrupa por ano
+  summarise(media = mean(esp_vida),
+            mediana = median(esp_vida)) %>% 
+  head(10) 
+
+
+```
+
+- Note que executamos duas operações com o *pipe*. Primeiro, agrupamos pela variável de interesse. Depois, pedimos a média para cada um desses anos.
+
+## Exercício
+
+Filtre os dados
+Extraia a média da esperança de vida por Estado a cada ano. Armazene os dados em um objeto chamado: "med_esp_ano_uf"
+
+
+
+
+# Mesclar dados no R
+## JOIN (merge): melhor que o PROCV
+
+Em geral, as bases de dados disponíveis não estão completas: precisam ser cruzadas para obter maiores informações. Por exemplo, no caso da base **dados_sociais**, não foi especificada a região a qual os municípios e estados pertencem. Como proceder?
+
+No excel, certamente você iria se atrapalhar um pouco até aprender a utilizar o PROCV. Felizmente, o **R** apresenta soluções rápidas e intuitivas para essa atividade.
+
+Examinando os dados, nota-se que as regiões representam o primeiro número da variável *uf*.
+
+```{r warning= FALSE, echo=FALSE, message= FALSE}
+
+library(knitr); library(kableExtra)
+x = data_frame( a = c(1, 2, 3, 4, 5),
+                b = c("Norte", "Nordeste", "Sudeste", "Sul", "Centro Oeste"))
+colnames(x) <- c("Código", "Região")
+
+kable(x)  %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+
+Portanto, essa é uma chave para mesclar as tabelas.
+
+![Ilustração das formas de merge no R](C:/curso_r/Apresentacao/join_r2.png)
+
+![Ilustração das formas de merge no R](C:/curso_r/Apresentacao/join_by_r.png)
+
+
+## JOIN (merge): junção natural
+
+
+- Para ilustrar as formas de mesclar dados no **R**, vamos criar dois pequenos dataframes.
+
+```{r eval = FALSE}
+df1 <- tibble(letras = letters[1:8], X = 1:8)
+df2 <- tibble(letras = letters[5:12], Y = 1:8)
+```
+
+- Assim, o comando geral é:
+
+```{r eval = FALSE}
+# Apenas os dados em comum
+inner_join(df1, df2)
+# Idêntico, mas preferível!
+inner_join(df1, df2, by = "letras")
+
+```
+
+
+
+## JOIN (merge): outros casos
+```{r eval = FALSE}
+# Junção total
+full_join(df1, df2, by = "letras")
+
+# Junção à esquerda
+left_join(df1, df2, by = "letras")
+
+# Junção à direita
+right_join(df1, df2, by = "letras")
+```
+- Ainda, pode-se mesclar apenas os dados não coincidentes.
+```{r eval=FALSE}
+anti_join(df1, df2, by ="letras")
+anti_join(df2, df1, by ="letras")
+
+```
+
+
+#  Exercícios
+
+## Fixação do comandos básicos
+- Aplicaremos os comandos aprendidos para efetura análises dos dados sobre o programa Financiamento Estudantil (FIES) e do banco *dados_sociais*.
+- Essa base administrativa retrata a população dos alunos matriculados no programa FIES. 
+- Para esse execício, será utilizada uma amostra de 10% das observações.
+- Acesse o arquivo: **exercicio_fixacao_dplyr.pdf**
+
+## Primeiro passo: quem são as variáveis?
+- Vamos seguir os seguintes passos:
+   1. No diretório atual encontram-se os arquivos? Tente utilizar **list.files()**.
+   2. Baixe o arquivo **fies_sample.csv**.  
+   3. Cheque a estrutura do banco. **str()**
+   4. Identifique o nome das variáveis **colnames()**. Se quiser, salve em um objeto.
+
+## select(): selecionando variáveis relevantes
+- O banco tem 50 variáveis. Nem todas são relevantes.
+- Selecione algumas variáveis relevantes e salve no objeto fies_sub:
+    + UF, código do contrato, raça, sexo, valor da mensalidade, nome da mantenedora, a data de nascimento, quantidade de semestres financiados, descrição e código do curso e situação de ensino médio escola pública .
+- **Pergunta:** é possível selecionar as variáveis apenas por alguns atributos dos nomes (ex: DS, CO, NO, ST ou QT)?
+
+## Dicas
+- Em caso de dúvida, use os mecanismos de ajuda:
+    + help(comando): help(mutate)
+    + ?comando: ?mutate
+    + também use os *cheetsheets* do *dplyr* [**aqui**](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) ou na pasta *cheet_sheets*
+    + ou acesse a página oficial do *dplyr* [**aqui**](http://dplyr.tidyverse.org/reference/index.html)
+
+
+
+
+# Mais funções para manipulação de dados
+
+## funções auxiliares
+- Na sumarização dos dados, algumas funções são muito úteis para 
+
+```{r echo=FALSE, warning=FALSE , message= FALSE}
+library(knitr)
+library(kableExtra)
+
+s<- c("n()", "n_distinct()", "cumsum()", "rank()", "any()", "all()", "quantile()", "ifelse()" )
+s1<- c("Número de observações no grupo", "Valores únicos de um vetor", "Soma cumulativa", "Ranqueia Variáveis", "Alguns valores são verdadeiros?", "Todos valores são verdadeiros?", "Quantis", "Criar booleano")
+s2<- data.frame(s, s1)
+colnames(s2)<- c("Função", "Decrição")
+
+kable(s2)%>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+  
+```
+
+**Acesse a pasta cheat_sheet para mais dicas**
+
+## arrange(): classificando os dados
+- No *Excel* é comum ordenar os dados. O comando **arrange()** permite fazer isso com muita facilidade.
+
+```{r eval = FALSE}
+# Exibir os dados de acordo com a menor população 
+dados_sociais %>% arrange(pop)
+```
+- **Exercício**: de acordo com a base, quais os três municípios com a menor população no ano de 2010?
+
+
+## n(): contando informações
+
+Quando observamos uma base de dados, muitas vezes queremos contar quantos valores uma determinada observação carrega. Essa informação é facilmente adquirida com a combinação do comando group_by() e summarise.
+
+```{r}
+# Utilizar o exemplo do datasus
+library(read.dbc)
+sihsus <- read.dbc("C:/curso_r/dados/RDSE1701.dbc")
+
+# contar quantos casos por municipio
+sihsus %>% 
+  group_by(MUNIC_RES) %>% 
+  summarise(n = n()) %>% 
+  arrange(-n)
+
+```
+
+## distinct(): extirpando linhas repetidas
+Um problema comum em dados administrativos é a repetição de registros - por exemplo, uma mesma observação é repetida em diversos meses seguidos. As estimativas que fizemos dos contratos do FIES não são tão precisas pois há grande números de contratos repetidos ao longo dos meses. No entanto, buscamos apenas informações únicas sobre os contratos - por exemplo, quantas pessoas inscritas pelo FIES são do sexo feminino e cursam direito. Para isso, devemos identificar a existência de casos repetidos e a de casos únicos.
+
+```{r echo = FALSE}
+fies_sample <- fread("C:/curso_r/dados/fies_sample.csv", dec = ",")
+
+```
+
+```{r }
+# há casos duplicados?
+fies_sample %>% 
+  select(CO_CONTRATO_FIES) %>%
+  duplicated() %>% 
+  sum()
+# quantos casos únicos?
+fies_sample %>% 
+  summarise(unicos = n_distinct(CO_CONTRATO_FIES))
+``` 
+* Você percebeu que a soma do resultado do comando duplicated() é uma soma de um vetor lógico?* 
+
+
+Como a base administrativa do FIES é semestral, cada contrato tem diversas observações para cada mês. Então, é necessário encontrar as observações únicas:
+
+```{r }
+fies_sub_dist <- fies_sample %>%
+  distinct(CO_CONTRATO_FIES, .keep_all = TRUE)
+```
+O argumento *.keep_all = TRUE* mantém todas as variáveis no banco. 
+
+
+
+## Exemplo
+- Veja um exemplo de como encontrar o valor médio da mensalidade
+```{r message= FALSE, warning= FALSE}
+mens_uf <- fies_sample %>% 
+  group_by(SG_UF) %>%
+  select(SG_UF, VL_MENSALIDADE)%>%
+  summarise(media_mens = mean(VL_MENSALIDADE, na.rm = TRUE))
+mens_uf
+```
+Veja como o pipe **%>%** permite encadear uma grande quantidade de comandos. 
+
+## ifelse(): criar booleno
+
+Outra função comum para organizar base de dados é a criação de booleanos. Imagine que você quer categorizar as mensalidades médias entre os estados de acordo com um determinado valor. Se a mensalidade for superior a R$1.000,00, você classificará como **1**, nos outros casos como **0**.
+Essa operação é muito simples. Como você está criando uma nova coluna, há necessidade de utilizar o *mutate()* em conjunto com um operador lógico.
+
+Primeiro, verifique quais os argumentos do *ifelse()*. ?ifelse
+```{r}
+mens_uf %>% 
+  mutate(acima_mil = ifelse(media_mens >= 1000, 1, 0),
+         acima_mil2 = ifelse(media_mens >= 1000, "Maior que R$1.000", 
+                             "Menor que R$1.000"))
+
+```
+O comando não limita a criação de booleanos numéricos, pois permite criar o mesmo um classificador de texto. Ainda, é possível fazer múltiplas condições encadeadas
+
+```{r}
+mens_uf %>% 
+  mutate(tres_classe = ifelse(media_mens <900, 0,
+                            ifelse(media_mens >= 900 & media_mens <= 1100, 1, 2)))
+```
+
+## round() - arredondar
+No *Excel* arredondar os números exige pouco esforço. Assim também ocorre no **R**. 
+
+```{r eval = FALSE}
+# Gerar uma distribuição normal aleatória
+x <- rnorm(10, 5, 1)
+# Arredondar
+round(x)
+# Arredondar com duas casas decimais
+round(x, digits = 2)
+# Ou ainda...
+round(x, 2)
+```
+
+Claro, você pode aplicar isso à lógica de manipulação do *dplyr*. Nesse caso, vamos aplicar não só o arredondamento comum, mas o *ceiling()* e o *floor()*.
+
+```{r}
+#
+mens_uf %>% 
+  mutate(media_mens1 = round(media_mens, 1),
+         media_mens2 = ceiling(media_mens),
+         media_mens3 = floor(media_mens))
+
+```
+
+
+
+## any() - algum valor é verdadeiro?
+- Em um banco grande não é possível inspecionar visualmente elementos como os *NAs* ou outras informações. 
+- A função *any()* permite identificar facilmente se algum elemento possui determinada característica especificada.
+```{r eval = FALSE}
+# Algum elemento do banco "df_na" é NA?
+any(is.na(df_na))
+# A coluna letras do banco "df_na" é NA?
+any(is.na(df_na$letras))
+# A coluna letras do banco "df_na" contém a letra E?
+any(df_na == "E")
+any(df_na$idade >10)
+```
+
+Outra utilidade é a criação de variáveis de acordo com grupos. Para explicitar a situação, Para o exemplo, vamos utilizar dados de uma pesquisa de domicílios. 
+
+```{r}
+# baixar os dados
+dom <- read_csv2("C:/curso_r/dados/dados_domiciliares.csv", 
+          locale = locale(encoding = "Latin1"))
+
+# olhar os dados
+glimpse(dom)
+
+# nome das colunas
+colnames(dom)
+
+```
+
+Agora, como saber quantos domicílio tem idosos (pessoas acima de 60 anos)? Você pode agrupar os dados por domicílios (*group_by()*) e utilizar o comando *any()* em conjunto com o *ifelse()*. 
+
+```{r}
+dom <- dom %>% 
+  group_by(domicilio) %>% 
+  mutate(dom_idoso = ifelse(any(idade >= 60), 
+                            "Dom. tem idoso", "Não tem idoso"))
+
+# quantos domicílios tem idosos
+dom %>% 
+  distinct(dom_idoso , .keep_all = TRUE) %>% 
+  group_by(dom_idoso) %>% 
+  count()
+
+```
+
+## cut(): transformar dados numéricos em categóricos
+
+Imagine  que você tem um vetor com a idade de diversos indivíduo e há a necessidade de reclassifica-la faixas etárias. Por exemplo, a cada 5 anos.
+```{r }
+# cortar as idades em intervalos de 5 anos
+dom <- dom %>% 
+  mutate( idade_cut = cut(idade, seq(0,100, 5)))
+```
+
+É claro que essa solução, embora prática, não gera um resultado legível. Nesse caso, você pode utilizar uma função pronta, como a *age_cat*, que está na nossa pasta de funções.
+
+```{r}
+# ler uma função criada
+source("C:/curso_r/funcoes/age_cat.R")
+# ler os argumentos da funcao
+args(age.cat)
+# criar categoria de idades
+dom <- dom %>% 
+  mutate( idade_cat = age.cat(idade, lower = 0, 
+                              upper = 90))
+```
+
+## paste(): concatenar strings
+
+-Muitas vezes faz-se necessário editar elementos de texto no **R**. Por exemplo, os nomes de um banco. 
+- A função paste permite fazer isso de forma direta.
+
+```{r  eval = FALSE}
+# Irmãos Peixoto
+irmaos <- c("Edgar", "Edclésia", "Edmar", "Edésia", "Edésio")
+
+# Como colocar os sobrenomes?
+paste(irmaos, "Peixoto")
+
+
+```
+
+No *dplyr*, você poder criar variáveis juntando colunas. Suponha que você quer uma categoria para especificar o sexo e cor das pessoas pesquisadas.
+
+```{r}
+dom <- dom %>% 
+  mutate(sexo_cor = paste(sexo, "-", cor)) 
+
+dom %>% 
+  group_by(sexo_cor) %>% 
+  count()
+
+```
+## gsub(): padrões e substituição
+
+Há uma série de comandos que facilitam a identificação de padrões e substituição desses valores. Por exemplo, suponha a necessidade de substituir um **-** por uma **@**. 
+
+```{r}
+# funcionamento do gsub
+gsub("-", "@", "curso-hotmail.com")
+
+# aplicando a um data.frame
+dom %>% 
+  mutate(sexo_cor2 = gsub("-", "@", sexo_cor)) %>% 
+  select(sexo_cor2) %>%  #selecionar variável de interesse
+  head(10) # mostrar 10 primeiros
+
+```
+
+
+## grepl():padrões e substituição
+Outra função para tratamento de strings é a *grepl()*. 
+
+```{r}
+dom %>% filter(grepl("Pret", cor, ignore.case = TRUE))
+
+```
+
+
+## lead() e lag(): achar valores anteriores e posteriores em um vetor 
+
+Outra tarefa comum em uma base de dados é tentar observar a variação de uma variável no tempo ou a necessidade de defasar uma série. 
+
+```{r}
+x = 1:10
+# uma defasagem
+lag(x)
+# duas defasagens
+lag(x, 2)
+
+# adiantar uma vez 
+lead(x)
+
+# adiantar duas vezes
+lead(x, 2)
+
+```
+Claro isso, pode ser aplicado à fórmula básica do *dplyr*.
+```{r}
+# criar uma série
+df = tibble(a = rep(1:5, 3), 
+            b = rnorm(15, 15, 10))
+
+# lead e lag
+df %>% 
+  mutate(c = lead(b, 1), 
+         d = lag(b, 2))
+
+```
+
+No exemplo abaixo, temos um caso mais concreto. Suponha que você quer saber a variação da renda per capita nos municípios do Estado de Rondônia.
+
+```{r}
+TO <- dados_sociais %>% 
+  filter(uf == "11") %>% 
+  select(ano:municipio, rdpc)
+
+# exibir primeiras linhas
+head(TO)
+
+# lead
+TO <- TO %>% 
+  group_by(cod_ibge) %>% 
+  mutate(lag_rdpc = lag(rdpc), 
+         var_rdpc = (rdpc - lag_rdpc)/ lag_rdpc,
+         var_rdpc_pec = paste(round(var_rdpc*100, 2), "%"))
+
+
+```
+
+## Exercício
+
+- Faça o uso do o lead e lag para todo o banco dados sociais.
+- Observe quais municípios tiveram o maior aumento da renda per capita no período.
+- Quais tiveram redução.
+- Cria uma variável booleana para isso. 
+
+## bind_cols e bind_rows
+- Os comandos **bind_** permitem ligar colunas e linhas de bancos com dimensões iguais.
+```{r eval = FALSE}
+# extrair linhas específicas
+um  <-  dados_sociais[1:4, ]
+dois <- dados_sociais[7011:7014, ]
+
+# ligar em um novo objeto 
+meu_bind <- bind_rows(um, dois)
+```
+
+- Os comandos **bind_** permitem ligar colunas e linhas de bancos com dimensões iguais.
+```{r eval = FALSE}
+# extrair colunas
+um   <- dados_sociais[ , 3 ]
+dois <- dados_sociais[ , 8 ]
+
+# ligar em um novo objeto 
+meu_bind2 <- bind_cols(um, dois)
+```
+
+## NAs: valores não especificados ou perdidos
+- Ao realizar o **full_join**, o resultado apresenta algumas observações como *NA* (ver exemplo acima).
+- Os *NAs* podem representar tanto informações indeterminadas quanto valores propositadamente omitidos. 
+- De qualquer forma, lidar com os NAs é muito fácil:
+```{r eval = FALSE}
+# Data frame com NAs
+df_na <- tibble( letras = LETTERS[1:10],
+                 idade =  c( seq(25L, 40L, 5L), NA,
+                             NA, 32L, rep(NA, 3)))
+
+# é possível saber se um vetor é NA
+is.na(df_na)
+# Também é possível remover esses valores
+na.omit(df_na)
+
+```
+
+
+## replace_na() : substituir NAs
+- Porém, não é recomendado retirar os NAs sem alguma reflexão. Afinal, eles podem dizer alguma coisa sobre os dados. Ou, ainda, serem apenas campos numúricos não preenchidos.
+- Por isso, é melhor substituir os NAs.
+```{r eval = FALSE}
+# Substituindo NAs por números
+replace_na(df_na, list(idade = 0))
+
+# Substituindo NAs por textos
+replace_na(df_na, list(idade = "Idade não informada"))
+```
+
+
+
+
+## quantile()
+
+Para calcular os intervalos de uma distribuição acumulada de uma variável (quantis), há funções bastante diretas. 
+
+
+```{r}
+# calcular quintis
+quantile(dom$idade)
+
+# calcular decis
+quantile(dom$idade, seq(0.1, 1, 0.1))
+
+# calcular os percentis
+quantile(dom$idade, seq(0.01, 1, 0.01))
+
+
+```
+
+No dplyr, a função *ntile()* divide o vetor em *n* grupos de mesmo tamanho. 
+
+```{r}
+dom <- dom %>% 
+  ungroup() %>% # desagrupa os dados
+  mutate(quintil = ntile(idade, 5),
+         decil = ntile(idade, 10))
+
+# todos os grupos tem mesmo tamanho
+dom %>% 
+  group_by(decil) %>% 
+  count()
+
+
+```
+
+
+# Como lidar com datas
+Lidar com datas pode ser um pequeno problema quando lidamos com dados. 
+Vamos utilizar o exemplo do seguro defeso.
+
+- Primeiro, instale e ative o pacote *lubridate*:
+    + você lembra como instalar e ativar pacotes? 
+    + dica: *inst....*
+
+
+
+## lubridate: transformando as datas em datas (!)
+- O lubridate opera datas levando em conta que:
+    + *y* = ano
+    + *m* = mês
+    + *d* = dia
+- Assim, você pode transformar *characters* em datas caso tenham dia, mês e ano, da seguinte forma:
+
+```{r echo = FALSE, warning= FALSE, message= FALSE}
+library(lubridate)
+```
+
+```{r}
+# ano, mês e dia sem separador
+ymd("20180131")
+# mês, dia e ano com separador "-"
+mdy("01-31-2018")
+# dia, mês e ano com separador "/"
+dmy("31/01/2018")
+
+```
+
+Observe também que quando as datas são apresentadas no formato mês/ano, não há como transformar em datas. Por isso, você pode fazer uso do *paste()* para completar as suas datas.
+
+```{r }
+# criamos um vetor com datas mes (m) e ano (y)
+datas <- c("01/2014", "03/2016")
+# adicionamos o dia (d) com o paste0
+dmy(paste0("01", datas))
+
+```
+
+## lubridate: acessando informações das datas
+- Estruturar os dados para o formato de datas permite extrair informações básicas para realizar operações lógicas.
+```{r}
+# criar um vetor de datas
+datas<- ymd(c("20180131", "20170225", "20160512"))
+# quais os anos
+year(datas)
+# quais os meses
+months(datas) # formato nome
+month(datas) # fomato numero
+# dias
+day(datas)
+# dia da semana
+wday(datas)
+```
+
+
+## Exercício
+
+- Leia os dados do seguro defeso na pasta dados. Lembre-se de efetuar uma inspeção visual antes.
+- Peça o **head()** do banco. Quantas datas você identifica?
+
+- A partir do banco seguro defeso, verifique:
+    + as datas presentes no banco tem a classe de data? Utilize **is.Date()**
+    + a data de início do defeso ocorre no período abrangido pelo banco de dados?
+    + a data de início do defeso ocorre no período abrangido pelo banco de dados?
+    + *melhor*: o defeso ocorre no período do banco de dados?
+    + como retirar do banco as linhas em que o defeso não corresponda ao período abrangido pelo banco de dados?
+    + em que dias os saques das parcelas ocorreram? Qual dia concentra mais saques?
+
+
+
+
+
