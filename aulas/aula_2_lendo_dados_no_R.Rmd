@@ -282,9 +282,14 @@ head(problema, 10)
 A leitura dos acentos é problemática, mas é um problema facilmente solucionável. Mas perceba que o problema de leitura ocorrerá com texto. Se o banco tem apenas números, não há problema. 
 Esse problema leitura de dados no windows pode ser resolvido com a especificação do encoding no corpo da função **read_csv**. 
 ```{r eval=FALSE}
+# com read_csv()
 resolvido  <- read_csv("C:/curso_r/dados/exemplo1a.txt", 
                       locale = locale(encoding = "Latin1"))
 head(resolvido, 15)
+
+# com fread()
+fread("C:/curso_r/dados/exemplo1.csv", 
+                     nrows = 5, encoding = "Latin-1")
 
 ```
 
@@ -299,6 +304,15 @@ ex4  <- read_excel("C:/curso_r/dados/exemplo4.xlsx")
 
 # Importar a segunda planilha
 ex4_s2  <- read_excel("C:/curso_r/dados/exemplo4.xlsx", sheet = 2)
+
+```
+## Lendo dbc
+
+No caso dos dados do DATASUS, os arquivos estão em formato dbc. Para a leitura dessa extensão, há o pacote *read.dbc()*.
+```{r eval = FALSE}
+library(read.dbc)
+ 
+sihsus <- read.dbc("RDSE1701.dbc")
 
 ```
 
