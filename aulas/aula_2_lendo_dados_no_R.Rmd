@@ -1,6 +1,6 @@
 # "Capítulo 2 - Importando e Exportando dados no R"
 
-# Introdução
+## Introdução
 
 A importação de dados é uma da parte mais importantes da análise de dados no **R**. Embora seja uma tarefa fácil, muitas vezes o iniciante se confunde com a estratégia de importação. Este capítulo apresentará diversas formas de importação de dados com foco na eficiência e rapidez. Por isso, **não exite consultar este material quando estiver com dúvidas sobre a importação dos dados**. Além disso, esse capítulo mostrará como mesclar dados no **R**, tarefa fácil e muito útil no dia a dia. 
 
