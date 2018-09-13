@@ -1,45 +1,40 @@
 ---
-title: "CapÌtulo 2 - Importando e Exportando dados no R"
+title: "Cap√≠tulo 2 - Importando e Exportando dados no R"
 author: "Marcelo Prudente"
 date: "14 de agosto de 2018"
-output: 
-  pdf_document: 
-    highlight: tango
-    number_sections: yes
-    toc: yes
-    toc_depth: 4
+output: rmarkdown::github_document
 fontsize: 12pt
 documentclass: report
 ---
 
 \renewcommand{\figurename}{Fig.}
-\renewcommand{\chaptername}{SeÁ„o}
+\renewcommand{\chaptername}{Se√ß√£o}
 \renewcommand{\listtablename}{Quadro}
 \renewcommand{\tablename}{Quadro}
-\renewcommand{\contentsname}{Sum·rio}
+\renewcommand{\contentsname}{Sum√°rio}
 
-# IntroduÁ„o
+# Introdu√ß√£o
 
-A importaÁ„o de dados È uma da parte mais importantes da an·lise de dados no **R**. Embora seja uma tarefa f·cil, muitas vezes o iniciante se confunde com a estratÈgia de importaÁ„o. Este capÌtulo apresentar· diversas formas de importaÁ„o de dados com foco na eficiÍncia e rapidez. Por isso, **n„o exite consultar este material quando estiver com d˙vidas sobre a importaÁ„o dos dados**. AlÈm disso, esse capÌtulo mostrar· como mesclar dados no **R**, tarefa f·cil e muito ˙til no dia a dia. 
+A importa√ß√£o de dados √© uma da parte mais importantes da an√°lise de dados no **R**. Embora seja uma tarefa f√°cil, muitas vezes o iniciante se confunde com a estrat√©gia de importa√ß√£o. Este cap√≠tulo apresentar√° diversas formas de importa√ß√£o de dados com foco na efici√™ncia e rapidez. Por isso, **n√£o exite consultar este material quando estiver com d√∫vidas sobre a importa√ß√£o dos dados**. Al√©m disso, esse cap√≠tulo mostrar√° como mesclar dados no **R**, tarefa f√°cil e muito √∫til no dia a dia. 
 
-**DICA:** vocÍ pode aprofundar os tÛpicos desta aula neste site:
+**DICA:** voc√™ pode aprofundar os t√≥picos desta aula neste site:
 
-- [**Tutorial de importaÁ„o de dados do Datacamp**](https://www.datacamp.com/community/tutorials/r-data-import-tutorial#csv)
+- [**Tutorial de importa√ß√£o de dados do Datacamp**](https://www.datacamp.com/community/tutorials/r-data-import-tutorial#csv)
 
 
 # Importando Dados no R
 
-## Qual o diretÛrio (pasta) de trabalho?
-A primeira pergunta a ser feita quando importamos dados È: onde est„o os meus dados? 
-Por isso, duas funÁıes importantes para a organizaÁ„o do trabalho s„o a **getwd()** e a **setwd()**.*Digite*: **getwd()** em seu console. O que vocÍ obtÍm? Lembre-se que vocÍ pode pedir ajuda por meio do **?getwd()**.
+## Qual o diret√≥rio (pasta) de trabalho?
+A primeira pergunta a ser feita quando importamos dados √©: onde est√£o os meus dados? 
+Por isso, duas fun√ß√µes importantes para a organiza√ß√£o do trabalho s√£o a **getwd()** e a **setwd()**.*Digite*: **getwd()** em seu console. O que voc√™ obt√™m? Lembre-se que voc√™ pode pedir ajuda por meio do **?getwd()**.
 
-Com essa funÁ„o, vocÍ saber· qual a pasta de trabalho corrente vinculada a sua seÁ„o do **R**. No entanto, È prov·vel que os seus dados n„o estejam ali. Como fazer, ent„o?
+Com essa fun√ß√£o, voc√™ saber√° qual a pasta de trabalho corrente vinculada a sua se√ß√£o do **R**. No entanto, √© prov√°vel que os seus dados n√£o estejam ali. Como fazer, ent√£o?
 
-## Escolhendo o diretÛrio de trabalho
+## Escolhendo o diret√≥rio de trabalho
 
-Em regra, seus arquivos est„o em alguma pasta no seu computador. Para melhorar a organizaÁ„o do trabalho no curso, a principal sugest„o È criar uma pasta especÌfica na qual ficar„o os seus dados e scripts. H· duas possÌbilidades para criar uma pasta: 
+Em regra, seus arquivos est√£o em alguma pasta no seu computador. Para melhorar a organiza√ß√£o do trabalho no curso, a principal sugest√£o √© criar uma pasta espec√≠fica na qual ficar√£o os seus dados e scripts. H√° duas poss√≠bilidades para criar uma pasta: 
 
-1) ir na pasta diretamente, clicar com o bot„o direito e criar nova pasta.
+1) ir na pasta diretamente, clicar com o bot√£o direito e criar nova pasta.
 2) criar a pasta por meio do **R**.
 
 ```{r eval = FALSE}
@@ -48,19 +43,19 @@ dir.create("C:/curso_r")
 ```
 
 
-Conforme mostramos abaixo, È f·cil definir a pasta de trabalho onde est„o os seus arquivos.
+Conforme mostramos abaixo, √© f√°cil definir a pasta de trabalho onde est√£o os seus arquivos.
 ```{r }
 # Estabelecer diretorio de trabalho
 setwd("C:/curso_r")
 ```
-Esse comando permite baixar arquivos com maior facilidade, pois cria-se uma conex„o entre o **R** e sua pasta. Assim, podemos listar todos os arquivos contidos na pasta.
+Esse comando permite baixar arquivos com maior facilidade, pois cria-se uma conex√£o entre o **R** e sua pasta. Assim, podemos listar todos os arquivos contidos na pasta.
 
 ```{r eval = FALSE}
 # lista os arquivos da pasta
 list.files()
 ```
 
-Ainda, È possÌvel criar novas subpastas para guardar seus dados.
+Ainda, √© poss√≠vel criar novas subpastas para guardar seus dados.
 
 
 ```{r eval = FALSE}
@@ -69,15 +64,15 @@ dir.create("meus_dados")
 ```
 
 
-# Os tipos de dados e preparaÁ„o para leitura
+# Os tipos de dados e prepara√ß√£o para leitura
 
-Depois de identificar a pasta, o passo necess·rio È saber com qual tipo de dados estamos lidando. H· um infinidade de extensıes, algumas mais, outras menos conhecidas. Em geral, as bases governamentais est„o disponibilizadas em trÍs principais extensıes:
+Depois de identificar a pasta, o passo necess√°rio √© saber com qual tipo de dados estamos lidando. H√° um infinidade de extens√µes, algumas mais, outras menos conhecidas. Em geral, as bases governamentais est√£o disponibilizadas em tr√™s principais extens√µes:
 
 - formatos de texto (*.csv* ou *.txt*); 
 - em excel (*.xls* ou *.xlsx*);
 - em dbf (*.dbf*, no caso dos dados do DATASUS)
 
-H· ainda outros formatos relacionados aos diversos programas estatÌsticos do mercado:
+H√° ainda outros formatos relacionados aos diversos programas estat√≠sticos do mercado:
 
 - *.dta*, do STATA
 - *.sav*, do SPSS
@@ -85,25 +80,25 @@ H· ainda outros formatos relacionados aos diversos programas estatÌsticos do mer
 - *.fwf*, formato fixo
 - entre outros
 
-AlÈm dessas, · os formatos de shapefile (*.shp*), xml (*.xml*), html, entre outros.
+Al√©m dessas, √° os formatos de shapefile (*.shp*), xml (*.xml*), html, entre outros.
 
-Se vocÍ leu o capÌtulo atÈ aqui, lembre-se: **È muito importante saber qual a extens„o do seu arquivo**. Sem isso, a leitura de dados pode se tornar um pesadelo. N„o sei se mencionei: **aprender a importar dados corretamente È um passo muito importante para a correta an·lise**. 
+Se voc√™ leu o cap√≠tulo at√© aqui, lembre-se: **√© muito importante saber qual a extens√£o do seu arquivo**. Sem isso, a leitura de dados pode se tornar um pesadelo. N√£o sei se mencionei: **aprender a importar dados corretamente √© um passo muito importante para a correta an√°lise**. 
 
 ## Separadores, decimais e encoding
 
-De modo geral, a leitura de dados em todos os pacotes tem uma fÛrmula bastante comum. N„o h· necessidade de decorar, apenas entendero funcionamento:
+De modo geral, a leitura de dados em todos os pacotes tem uma f√≥rmula bastante comum. N√£o h√° necessidade de decorar, apenas entendero funcionamento:
 
-1. Determinar o local do arquivo (ex: **"C:/curso_r/meu_arquivo.extensao")
+1. Determinar o local do arquivo (ex: **"C:/curso_r/meu_arquivo.extensao"**)
 2. Determinar o separador do arquivo (**","**, **";"**, **tab**, **separador fixo**)
-3. Determinar os separadores dos n˙meros decimais (**"."**, **","**)
-4. Determinar se a primeira linha contÈm o nome das vari·veis (**header == TRUE** )
+3. Determinar os separadores dos n√∫meros decimais (**"."**, **","**)
+4. Determinar se a primeira linha cont√©m o nome das vari√°veis (**header == TRUE** )
 5. Identificar o encoding do arquivo
 
-O item 1 j· foi abordado anteriormente. Lembre-se de identificar onde o seu arquivo est·. 
+O item 1 j√° foi abordado anteriormente. Lembre-se de identificar onde o seu arquivo est√°. 
 
-No caso do item 2, deve-se prestar muita atenÁ„o, sobretudo quando trabalhamos com arquivos de texto (**.txt**) e csv (**.csv**). Se vocÍ abrir um csv ou txt no bloco de notas, notar· que as colunas est„o separadas por algum dos separadores indicados (**","**, **";"**, **tab**) ou, em alguns casos, diversos n˙meros emparelhados (**separador fixo**). A soluÁ„o para esse problema È simples, conforme demonstraremos abaixo, mas deve **SEMPRE** ser observada. N„o se preocupe, pois ao longo do tempo essa n„o ser· uma grande quest„o para vocÍ.
+No caso do item 2, deve-se prestar muita aten√ß√£o, sobretudo quando trabalhamos com arquivos de texto (**.txt**) e csv (**.csv**). Se voc√™ abrir um csv ou txt no bloco de notas, notar√° que as colunas est√£o separadas por algum dos separadores indicados (**","**, **";"**, **tab**) ou, em alguns casos, diversos n√∫meros emparelhados (**separador fixo**). A solu√ß√£o para esse problema √© simples, conforme demonstraremos abaixo, mas deve **SEMPRE** ser observada. N√£o se preocupe, pois ao longo do tempo essa n√£o ser√° uma grande quest√£o para voc√™.
 
-Outra fonte de problemas È a separaÁ„o dos decimais (item 3). No **R**, as vÌrgulas n„o separam decimais como ocorre na notaÁ„o brasileira. Os programadores sabem disso e incorporam em seus pacores de importaÁ„o a opÁ„o para identificar se o decimal no arquivo original est· separado por ponto ou por vÌrgula. Portanto, fique atento. Afinal, vocÍ aprendeu na aula 1 que n˙mero separado por vÌrgula È lido como texto.
+Outra fonte de problemas √© a separa√ß√£o dos decimais (item 3). No **R**, as v√≠rgulas n√£o separam decimais como ocorre na nota√ß√£o brasileira. Os programadores sabem disso e incorporam em seus pacores de importa√ß√£o a op√ß√£o para identificar se o decimal no arquivo original est√° separado por ponto ou por v√≠rgula. Portanto, fique atento. Afinal, voc√™ aprendeu na aula 1 que n√∫mero separado por v√≠rgula √© lido como texto.
 
 ```{r}
 x <- "3,2"
@@ -112,21 +107,21 @@ y <- 3.2
 class(y)
 ```
 
-Por fim, o encoding È uma fonte de problemas quando temos vari·veis de texto com acentos (item 5). Algumas das funÁıes abaixo, especialmente do tidyverse, foram desenhadas para lidar com dados de texto em inglÍs (na verdade, UTF-8), que n„o contem acento. Abaixo, ensinaremos como lidar com esse tipo de problema. 
+Por fim, o encoding √© uma fonte de problemas quando temos vari√°veis de texto com acentos (item 5). Algumas das fun√ß√µes abaixo, especialmente do tidyverse, foram desenhadas para lidar com dados de texto em ingl√™s (na verdade, UTF-8), que n√£o contem acento. Abaixo, ensinaremos como lidar com esse tipo de problema. 
     
     
 
 ## Pacotes para a leitura de dados no **R** 
 
-Apesar dos diversos tipos de dados, a leitura deles no programa È bastante simples. Aqui, o foco ser· a leitura de dados em csv, txt, excel e dbc.
+Apesar dos diversos tipos de dados, a leitura deles no programa √© bastante simples. Aqui, o foco ser√° a leitura de dados em csv, txt, excel e dbc.
 
-H· in˙meros pacotes desenhados para essa funÁ„o:
+H√° in√∫meros pacotes desenhados para essa fun√ß√£o:
 
 - pacote de base do sistema, com *read.table()* e seus derivados;
-- o pacote *tidyverse*, com o *read_table()* e seus derivados - note a presenÁa do subscrito _ .
+- o pacote *tidyverse*, com o *read_table()* e seus derivados - note a presen√ßa do subscrito _ .
 - o pacote *data.table*, com o *fread()* 
 - o pacote *foreign*, com *read.dta()*, *read.spss()*, entre outros;
-- o pacote *read_dbc* com a funÁ„o *read.dbc* para a leitura de dados do DATASUS.
+- o pacote *read_dbc* com a fun√ß√£o *read.dbc* para a leitura de dados do DATASUS.
 
 
 
@@ -140,19 +135,19 @@ install.packages(read.dbc)
 
 
 ## Lendo .csv
-Antes de executar os comandos, È importante verificar a pasta em que est· o arquivo (lembre do passo 1). 
-Depois, faÁa uma inspeÁ„o visual nos dados do arquivo *exemplo1.csv*. Como o csv È um arquivo de texto, vocÍ pode abrÌ-lo no bloco de notas ou no excel.
+Antes de executar os comandos, √© importante verificar a pasta em que est√° o arquivo (lembre do passo 1). 
+Depois, fa√ßa uma inspe√ß√£o visual nos dados do arquivo *exemplo1.csv*. Como o csv √© um arquivo de texto, voc√™ pode abr√≠-lo no bloco de notas ou no excel.
 
 - identifique o separador do arquivo;
 - identifique o separador dos decimais.
 
-**AtenÁ„o**: o separador das colunas do arquivo *exemplo1.csv* È uma **,**
+**Aten√ß√£o**: o separador das colunas do arquivo *exemplo1.csv* √© uma **,**
 
-- Esse formato È muito comum nos dados americanos
+- Esse formato √© muito comum nos dados americanos
 
-### Lendo .csv separado por vÌrgulas
+### Lendo .csv separado por v√≠rgulas
 
-Abaixo, apresentamos algumas abordagens para a leitura dos dados separados por vÌrgula.
+Abaixo, apresentamos algumas abordagens para a leitura dos dados separados por v√≠rgula.
 
 ```{r eval= FALSE}
 # Base do sistema
@@ -163,26 +158,26 @@ ex1_base <- read.csv("C:/curso_r/exemplo1.csv")
     + o **dec = "."**
     + o **header == TRUE** 
 
-### Lendo .csv separado por ponto e vÌrgula
+### Lendo .csv separado por ponto e v√≠rgula
 
-Agora, vamos inspecionar o arquivo **exemplo2.csv**, no qual as colunas s„o separadas por **;**.
+Agora, vamos inspecionar o arquivo **exemplo2.csv**, no qual as colunas s√£o separadas por **;**.
 ```{r eval= FALSE}
 # Base do sistema
 ex2_base <- read.csv2("C:/curso_r/dados/exemplo2.csv")
 ```
 
-Veja que h· uma diferenÁa em relaÁ„o a forma de leitura do arquivo anterior: read_csv**2**. Esse **2** indica uma segunda forma de leitura em que:
+Veja que h√° uma diferen√ßa em rela√ß√£o a forma de leitura do arquivo anterior: read_csv**2**. Esse **2** indica uma segunda forma de leitura em que:
 
 - o **sep = ";"**
 - o **dec = ","**
 - o **header == TRUE** 
 
 
-Na pr·tica, a maior parte dos dados produzidos no Brasil tÍm separador **;** e dec = **.**. Ent„o, na d˙vida, utilize a segunda forma de ler csv: **read.csv2**. 
+Na pr√°tica, a maior parte dos dados produzidos no Brasil t√™m separador **;** e dec = **.**. Ent√£o, na d√∫vida, utilize a segunda forma de ler csv: **read.csv2**. 
 
 ## Lendo txt
 
-- o **R** fornece o **read.csv** como programa de base para ler arquivos de texto (*.txt*). Na verdade, os arquivos txt s„o lidos da mesma forma que os arquivos csv. Portanto, n„o h· diferenÁas concretas, exceto a presenÁa de vÌrgula ou ponto e vÌrgula no separador e vÌrgula ou ponto nos decimais.
+- o **R** fornece o **read.csv** como programa de base para ler arquivos de texto (*.txt*). Na verdade, os arquivos txt s√£o lidos da mesma forma que os arquivos csv. Portanto, n√£o h√° diferen√ßas concretas, exceto a presen√ßa de v√≠rgula ou ponto e v√≠rgula no separador e v√≠rgula ou ponto nos decimais.
 
 ```{r eval= FALSE}
 # Base
@@ -190,9 +185,9 @@ ex3_base <- read.csv("C:/curso_r/dados/exemplo1a.txt")
 
 ```
 
-## Lendo com readr(): mais r·pido e com melhor formataÁ„o
+## Lendo com readr(): mais r√°pido e com melhor formata√ß√£o
 
-Apesar das funÁıes constantes na base do sistema do **R**, h· outras formas mais eficientes para a leitura dos dados. Uma delas È apresentada pelo readr(), do pacote tidyverse. A sintaxe È muito prÛxima ‡ apresentada anteriormente e se diferencia apenas pela presenÁa do _ no comando. 
+Apesar das fun√ß√µes constantes na base do sistema do **R**, h√° outras formas mais eficientes para a leitura dos dados. Uma delas √© apresentada pelo readr(), do pacote tidyverse. A sintaxe √© muito pr√≥xima √† apresentada anteriormente e se diferencia apenas pela presen√ßa do _ no comando. 
 Por isso, indicamos a leitura por meio do readr em detrimento da base do sistema.
 
 
@@ -209,9 +204,9 @@ ex2_tdv  <- read_csv2("exemplo2.csv")
 
 ```
 
-A abordagem do pacote *readr* È preferÌvel, pois permite importar dados no formato tbl_df (tiblle), cuja estrutura traz vantagens para leitura de dados. AlÈm disso, È muito mais r·pido que a base do sistema quando lidamos com bases de dados grandes (arquivos com mais de 100 mb, por exemplo) e bastante intuitivo. Como as atuais bases de dados s„o grandes, sugerimos o uso da abordagem do **readr**.
+A abordagem do pacote *readr* √© prefer√≠vel, pois permite importar dados no formato tbl_df (tiblle), cuja estrutura traz vantagens para leitura de dados. Al√©m disso, √© muito mais r√°pido que a base do sistema quando lidamos com bases de dados grandes (arquivos com mais de 100 mb, por exemplo) e bastante intuitivo. Como as atuais bases de dados s√£o grandes, sugerimos o uso da abordagem do **readr**.
 
-No quadro abaixo, identificamos outras formas de leitura contidas no pacote readr. Note as in˙meras possibilidades de leitura.
+No quadro abaixo, identificamos outras formas de leitura contidas no pacote readr. Note as in√∫meras possibilidades de leitura.
 
 ```{r echo= FALSE, warning=FALSE, results= "asis", message= FALSE}
 require(knitr)
@@ -219,12 +214,12 @@ require(kableExtra)
 library(tibble)
 
 a <- tibble( read  = c("read_csv()", "read_tsv()", "read_delim()", "read_fwf()", "read_table()"), 
-               desc = c("arquivos csv separados por ," , "arquivos separados por tab" , "arquivos separados por delimitador geral (espaÁo ou tab)", "arquivos com largura fixa", "arquivos separados por um espaÁo em branco" ))
+               desc = c("arquivos csv separados por ," , "arquivos separados por tab" , "arquivos separados por delimitador geral (espa√ßo ou tab)", "arquivos com largura fixa", "arquivos separados por um espa√ßo em branco" ))
 
   
-colnames(a) <- c("funÁ„o", "o que processa")
+colnames(a) <- c("fun√ß√£o", "o que processa")
 
-kable(a, format = "latex", booktabs = T, caption = "Outras funÁıes de leitura do pacote readr")%>%
+kable(a, format = "latex", booktabs = T, caption = "Outras fun√ß√µes de leitura do pacote readr")%>%
   kable_styling( latex_options = c( "hold_position", "scale_down")) %>%
   column_spec(1, bold = T, color = "blue")%>%
   row_spec(0, bold = T, color = "black")
@@ -234,7 +229,7 @@ kable(a, format = "latex", booktabs = T, caption = "Outras funÁıes de leitura do
 
 #### readr: lendo apenas algumas linhas
 
-A leitura dos dados pode envolver questıes pr·ticas como importar apenas algumas linhas dos dados - no caso de arquivos grandes, por exemplo, 1 milh„o de linhas - com a extens„o **n_max**. Essa È uma estratÈgia ˙til para dar uma r·pida olhada nas informaÁıes do banco de dados.
+A leitura dos dados pode envolver quest√µes pr√°ticas como importar apenas algumas linhas dos dados - no caso de arquivos grandes, por exemplo, 1 milh√£o de linhas - com a extens√£o **n_max**. Essa √© uma estrat√©gia √∫til para dar uma r√°pida olhada nas informa√ß√µes do banco de dados.
 
 ```{r eval = FALSE}
 ex1_tdv  <- read_csv("exemplo1.csv", 
@@ -242,7 +237,7 @@ ex1_tdv  <- read_csv("exemplo1.csv",
 ```
 
 #### readr: pulando linhas
-- TambÈm È possÌvel pular algumas linhas. PorÈm, com o readr os nomes das colunas n„o ser„o importados:
+- Tamb√©m √© poss√≠vel pular algumas linhas. Por√©m, com o readr os nomes das colunas n√£o ser√£o importados:
 ```{r eval = FALSE}
 ex1_tdv  <- read_csv("exemplo1.csv", skip = 3,  
                      n_max =  2)
@@ -250,7 +245,7 @@ ex1_tdv  <- read_csv("exemplo1.csv", skip = 3,
 
 #### readr: selecionando colunas
 
-Ainda, h· casos em que n„o se quer importar todas as colunas, apenas algumas.
+Ainda, h√° casos em que n√£o se quer importar todas as colunas, apenas algumas.
 
 ```{r eval = FALSE}
 ex1_tdv  <- read_csv("C:/curso_r/dados/exemplo1.csv", skip = 3,  
@@ -261,16 +256,16 @@ ex1_tdv  <- read_csv("C:/curso_r/dados/exemplo1.csv", skip = 3,
 
 ## fread(): velocidade
 
-As funÁıes do pacote readr s„o vers·teis e produzem tbl_df, mas n„o s„o as mais r·pidas diante de grandes bases de dados (> 1Gb). Sem d˙vida, na presenÁa de grandes bases de dados em txt ou csv a funÁ„o fread(), do pacote **data.table**, tem a melhor performance. 
-AlÈm disso, o *fread()* È extramemente ˙til quando n„o sabe-se qual o separador do arquivo, pois a funÁ„o foi construÌda para deduzi-lo. 
+As fun√ß√µes do pacote readr s√£o vers√°teis e produzem tbl_df, mas n√£o s√£o as mais r√°pidas diante de grandes bases de dados (> 1Gb). Sem d√∫vida, na presen√ßa de grandes bases de dados em txt ou csv a fun√ß√£o fread(), do pacote **data.table**, tem a melhor performance. 
+Al√©m disso, o *fread()* √© extramemente √∫til quando n√£o sabe-se qual o separador do arquivo, pois a fun√ß√£o foi constru√≠da para deduzi-lo. 
 
-Do mesmo modo que os outras funÁıes de leitura, permite:
+Do mesmo modo que os outras fun√ß√µes de leitura, permite:
 
-- ler apenas algumas linhas (**nrow = 10**, por exemplo) do arquivo para uma r·pida inspeÁ„o
+- ler apenas algumas linhas (**nrow = 10**, por exemplo) do arquivo para uma r√°pida inspe√ß√£o
 - delimitar os decimais com o comando **dec = ","**
-- tambÈm, È possÌvel ler apenas algumas das colunas desejadas (**select(c("col1", "col5"))**), por exemplo))
+- tamb√©m, √© poss√≠vel ler apenas algumas das colunas desejadas (**select(c("col1", "col5"))**), por exemplo))
 
-Embora eficiente, ‡s vezes apresenta erros para a leitura dos decimais. Por isso, sempre apÛs ler os dados recomenda-se observar a estrutura do arquivo baixado para verificar se as colunas (vetores) correspondem aos tipos desejados. 
+Embora eficiente, √†s vezes apresenta erros para a leitura dos decimais. Por isso, sempre ap√≥s ler os dados recomenda-se observar a estrutura do arquivo baixado para verificar se as colunas (vetores) correspondem aos tipos desejados. 
 
 
 ```{r, warning=FALSE, message=FALSE}
@@ -282,23 +277,23 @@ ex1_fread
 ```
 
 ## O problema do encoding
-Ao baixar dados no R no Windows, muitas vezes a leitura de dados de texto pode ser problem·tica, especialmente com as soluÁıes do **readr**. Isso porque essas funÁıes foram concebidas para a leitura de dados americanos - sem acentos ou caracteres especiais. 
+Ao baixar dados no R no Windows, muitas vezes a leitura de dados de texto pode ser problem√°tica, especialmente com as solu√ß√µes do **readr**. Isso porque essas fun√ß√µes foram concebidas para a leitura de dados americanos - sem acentos ou caracteres especiais. 
 
-Esse È um problema comum. Veja abaixo como o nome dos municÌpios brasileiros acabam distorcidos quando utilizamos o **read_csv**. 
+Esse √© um problema comum. Veja abaixo como o nome dos munic√≠pios brasileiros acabam distorcidos quando utilizamos o **read_csv**. 
 
 ```{r echo = FALSE, warning= FALSE, message= FALSE}
 library(readr)
 ```
 
-Note que a importaÁ„o do **readr** retorna quais as classes dos vetores que conformam banco de dados.
+Note que a importa√ß√£o do **readr** retorna quais as classes dos vetores que conformam banco de dados.
 ```{r }
 # leitura com problema
 problema <- read_csv("C:/curso_r/dados/exemplo1a.txt")
 head(problema, 10)
 ```
 
-A leitura dos acentos È problem·tica, mas È um problema facilmente solucion·vel. Mas perceba que o problema de leitura ocorrer· com texto. Se o banco tem apenas n˙meros, n„o h· problema. 
-Esse problema leitura de dados no windows pode ser resolvido com a especificaÁ„o do encoding no corpo da funÁ„o **read_csv**. 
+A leitura dos acentos √© problem√°tica, mas √© um problema facilmente solucion√°vel. Mas perceba que o problema de leitura ocorrer√° com texto. Se o banco tem apenas n√∫meros, n√£o h√° problema. 
+Esse problema leitura de dados no windows pode ser resolvido com a especifica√ß√£o do encoding no corpo da fun√ß√£o **read_csv**. 
 ```{r eval=FALSE}
 resolvido  <- read_csv("C:/curso_r/dados/exemplo1a.txt", 
                       locale = locale(encoding = "Latin1"))
@@ -308,7 +303,7 @@ head(resolvido, 15)
 
 
 ## Lendo Excel (xls e xlsx)
-- H· duas formas pr·ticas de ler dados do *Excel* no **R**. 
+- H√° duas formas pr√°ticas de ler dados do *Excel* no **R**. 
 - Vamos observar o arquivo **exemplo4.xlsx** e aplicar a leitura por comando.
 ```{r eval = FALSE}
 library(readxl)
@@ -320,37 +315,37 @@ ex4_s2  <- read_excel("C:/curso_r/dados/exemplo4.xlsx", sheet = 2)
 
 ```
 
-H· tambÈm a possibilidade de ler os dados com o cursor.V· em *File* **->** *Import Dataset* **->** *From Excel*.
+H√° tamb√©m a possibilidade de ler os dados com o cursor.V√° em *File* **->** *Import Dataset* **->** *From Excel*.
 
 
 
 ## Lendo outros tipos de arquivo
-- … possÌvel ler outros arquivos, como os de SPSS, SAS ou STATA. TambÈm, dados *.jason*, *.xml*, entre outros.
+- √â poss√≠vel ler outros arquivos, como os de SPSS, SAS ou STATA. Tamb√©m, dados *.jason*, *.xml*, entre outros.
 - Todos os comandos acima podem ser executados facilmente com o uso do mouse. 
-- Siga as instruÁıes:
+- Siga as instru√ß√µes:
     + *File*
     + *Import Dataset*
     + *From ...*
-- Apesar disso, recomendamos aprender os comandos. … mais r·pido!! Caso as d˙vidas persitam, acesse os links no final do arquivo. 
+- Apesar disso, recomendamos aprender os comandos. √â mais r√°pido!! Caso as d√∫vidas persitam, acesse os links no final do arquivo. 
 
 ## Leituras adicionais
 
-Mais uma vez, indico a leitura desse tutorial em caso de d˙vida.
+Mais uma vez, indico a leitura desse tutorial em caso de d√∫vida.
 
-- [**Tutorial de importaÁ„o de dados do Datacamp**](https://www.datacamp.com/community/tutorials/r-data-import-tutorial#csv)
-- [**Segunda parte do tutoria de importaÁ„o do Datacamp**](https://www.datacamp.com/community/tutorials/importing-data-r-part-two)
+- [**Tutorial de importa√ß√£o de dados do Datacamp**](https://www.datacamp.com/community/tutorials/r-data-import-tutorial#csv)
+- [**Segunda parte do tutoria de importa√ß√£o do Datacamp**](https://www.datacamp.com/community/tutorials/importing-data-r-part-two)
 - [**Abordagem Tidyverse**](https://readr.tidyverse.org/)
-- [**fread() do data.table: foco na eficiÍncia**](https://www.rdocumentation.org/packages/data.table/versions/1.11.4/topics/fread)
+- [**fread() do data.table: foco na efici√™ncia**](https://www.rdocumentation.org/packages/data.table/versions/1.11.4/topics/fread)
 
 
 
 # Exportando dados
 ## Exportando dados
-- … possÌvel utilizar as funÁıes **write** para exportar dados do **R** para a sua pasta.
+- √â poss√≠vel utilizar as fun√ß√µes **write** para exportar dados do **R** para a sua pasta.
 - Como os dados de texto podem ser lidos em qualquer programa (EXCEL,SPSS, SAS, STATA, entre outros), vamos aprender a exportar arquivos nessa forma.
 
 ```{r eval= FALSE}
-# VocÍ pode determinar a pasta na qual o arquivo ser? salvo
+# Voc√™ pode determinar a pasta na qual o arquivo ser? salvo
 setwd("C:/curso_r/dados/")
 
 # Exportando arquivos de texto
@@ -359,7 +354,7 @@ write.table(exemplo1_base, "meu_exemplo.csv")
 
 
 ## Exportando dados
-- Essa funÁ„o permite determinar:
+- Essa fun√ß√£o permite determinar:
 
 ```{r eval= FALSE}
 # Separador
@@ -370,7 +365,7 @@ write.table(exemplo1_base, "meu_exemplo2.csv",
 write.table(exemplo1_base, "meu_exemplo2.csv", 
           sep = ";", dec = ",")
 
-# Omitir o n˙mero das linhas
+# Omitir o n√∫mero das linhas
 write.table(exemplo1_base, "meu_exemplo2.csv", 
           sep = ";", dec = ",", row.names = FALSE)
 
@@ -381,10 +376,10 @@ write.table(exemplo1_base, "meu_exemplo2.csv",
 
 ## Exportando dados com readr e fread
 
-Assim como na importaÁ„o, os pacotes **readr** e **fread** trazem em seu bojo funÁıes de exportaÁ„o incorporando rapidez ao processo. No caso da exportaÁ„o dos dados, n„o h· maior mistÈrio, sendo o pacote da base do sistema bastante satisfatÛrio, mesmo com arquivos grandes. De qualquer modo, recomendo o uso da funÁ„o do **data.table**, o *fwrite*.
+Assim como na importa√ß√£o, os pacotes **readr** e **fread** trazem em seu bojo fun√ß√µes de exporta√ß√£o incorporando rapidez ao processo. No caso da exporta√ß√£o dos dados, n√£o h√° maior mist√©rio, sendo o pacote da base do sistema bastante satisfat√≥rio, mesmo com arquivos grandes. De qualquer modo, recomendo o uso da fun√ß√£o do **data.table**, o *fwrite*.
 
 ```{r}
-# com a funÁ„o fwrite do data.table
+# com a fun√ß√£o fwrite do data.table
 fwrite(ex1_fread, "meu_exemplo_com_fread.csv", 
           sep = ";", dec = ",", row.names = FALSE)
 ```
@@ -395,61 +390,61 @@ Caso queira exportar com a abordagem do readr, busque: **?write_csv**.
 
 
 
-# ExercÌcios: Importando dados com R
+# Exerc√≠cios: Importando dados com R
 
-## ExercÌcio 1
+## Exerc√≠cio 1
 
-Para esse exercÌcio, utilizaremos o banco *dados_sociais.csv* na pasta dados.
+Para esse exerc√≠cio, utilizaremos o banco *dados_sociais.csv* na pasta dados.
 
 ### Utilizando o pacote readr
 
 1. Carregue o pacote readr
 2. Baixe o arquivo *dados_sociais.csv* atribuindo a ele um objeto com mesmo nome.
-    + verifique se os nomes dos municÌpios foram importados corretamente.
+    + verifique se os nomes dos munic√≠pios foram importados corretamente.
 2. Baixe o arquivo *dados_sociais.csv* ajustando o encoding
-3. Baixe o arquivo *dados_sociais.csv* ajustando o encoding, pulando as primeira 100 linhas e importando apenas 50 observaÁıes.
+3. Baixe o arquivo *dados_sociais.csv* ajustando o encoding, pulando as primeira 100 linhas e importando apenas 50 observa√ß√µes.
     + os nomes das colunas foram importados corretamente?
-4. Baixe o arquivo *dados_sociais.csv* ajustando o encoding, pulando as primeiras 100 linhas e importando apenas 50 observaÁıes. Ajuste o cÛdigo para baixar os nomes das colunas corretamente. 
+4. Baixe o arquivo *dados_sociais.csv* ajustando o encoding, pulando as primeiras 100 linhas e importando apenas 50 observa√ß√µes. Ajuste o c√≥digo para baixar os nomes das colunas corretamente. 
     + **?read_csv**
 
 ### Utilizando fread()
 1. Carregue o pacote data.table.
 2. Baixe o arquivo dados_sociais.csv e atribua o nome **ds**
-    + È preciso colocar o separador das colunas? 
+    + √© preciso colocar o separador das colunas? 
 3. Observe a estrutra do objeto **ds**. As classes das colunas foram importadas corretamente?
-4. Baixe o arquivo *dados_sociais.csv* e atribua o nome **ds**. Dessa vez, corrija os erros de importaÁ„o.
+4. Baixe o arquivo *dados_sociais.csv* e atribua o nome **ds**. Dessa vez, corrija os erros de importa√ß√£o.
 5. Baixe o arquivo *dados_sociais.csv* e atribua o nome **ds**. Pule as 200 primeiras linhas e importe apenas 20.
 
 ### Lendo em Excel
 1. Carregue o pacote readxl.
 2. Leia as quatro planilhas do arquivo **exemplo4.xlsx** de duas formas:
-    + com o n˙mero da pasta de trabalho do excel.
+    + com o n√∫mero da pasta de trabalho do excel.
     + com o nome da pasta de trabalho do excel.
 - Nomeie cada uma das planilhas com os nomes das abas.
 
 
-## ExercÌcio 2 
+## Exerc√≠cio 2 
 - Com a base dados_sociais corretamente importada, verifique:
      + Qual a classe do banco de dados exemplo1_base? E do exemplo1_tdv?
-     + Quais as classes das vari·veis do banco?
+     + Quais as classes das vari√°veis do banco?
      + Como visualizar esses dados?
-     + Quais os nomes das vari·veis do banco? Crie um vetor com esses nomes.
-     + Como È possÌvel extrair a mÈdia da expectativa de vida? 
-     + Qual o m·ximo e o mÌnimo dessa vari·vel? 
+     + Quais os nomes das vari√°veis do banco? Crie um vetor com esses nomes.
+     + Como √© poss√≠vel extrair a m√©dia da expectativa de vida? 
+     + Qual o m√°ximo e o m√≠nimo dessa vari√°vel? 
      + Crie um data.frame com cada um desses valores. 
      
      
-## ExercÌcio 3
+## Exerc√≠cio 3
 1. Crie um tibble 10 x 4, sendo: 
-    + 1 coluna com um vetor numÈrico
-    + 1 coluna com um vetor lÛgico
+    + 1 coluna com um vetor num√©rico
+    + 1 coluna com um vetor l√≥gico
     + 1 coluna com um vetor character
     + 1 coluna com um vetor de texto
 2. Crie um data.frame iris. Acesse **data()**. Procure o banco de dados *iris*. Atribua o banco a um objeto.
-3. Exporte os dois bancos de dados em formato *csv* para a sua pasta de preferÍncia. 
+3. Exporte os dois bancos de dados em formato *csv* para a sua pasta de prefer√™ncia. 
 4. Tente exportar cada arquivo com o um separador de coluna distinto.
 5. Tente exportar cada arquivo com um separador decimal distinto.
-6. Verifique se o n˙mero das linhas est„o no arquivo exportado. Como resolver esse problema?
+6. Verifique se o n√∫mero das linhas est√£o no arquivo exportado. Como resolver esse problema?
 
 
 
