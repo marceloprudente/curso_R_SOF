@@ -2,7 +2,9 @@
 title: "Capítulo 2 - Importando e Exportando dados no R"
 author: "Marcelo Prudente"
 date: "14 de agosto de 2018"
-output: rmarkdown::github_document
+output: 
+  html_document:
+    keep_md: true
 fontsize: 12pt
 documentclass: report
 ---
