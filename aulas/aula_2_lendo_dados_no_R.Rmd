@@ -1,19 +1,4 @@
----
-title: "Capítulo 2 - Importando e Exportando dados no R"
-author: "Marcelo Prudente"
-date: "14 de agosto de 2018"
-output: 
-  html_document:
-    keep_md: true
-fontsize: 12pt
-documentclass: report
----
-
-\renewcommand{\figurename}{Fig.}
-\renewcommand{\chaptername}{Seção}
-\renewcommand{\listtablename}{Quadro}
-\renewcommand{\tablename}{Quadro}
-\renewcommand{\contentsname}{Sumário}
+# "Capítulo 2 - Importando e Exportando dados no R"
 
 # Introdução
 
