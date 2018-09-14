@@ -1,41 +1,59 @@
-###############
 ## Aula 2 ----
-###############
 
 ## Carregar pacotes
-# o pacote readr est· no tidyverse
+# o pacote readr est√° no tidyverse
 library(tidyverse)
-
-# È possÌvel baix·-lo individualmente
-library(readr)
-
-## diretorio
-# getwd - descobrir o diretÛrio
+# pacote data.table - fread()
+library(data.table)
+## diret√≥rio
+# getwd - descobrir o diret√≥rio
 getwd()
 
-# setwd - definir diretÛrio
+# setwd - definir diret√≥rio onde est√£o os dados
 setwd("C:/curso_r/dados")
 
-## Baixar dados
+# listar arquivos - para conferir dados
+list.files()
+
+
+# Baixar dados ----
+###############################################
+## Separado por v√≠rgula "," e decimal "." ----
+###############################################
+
 # Base do sistema
 exemplo1_base <- read.csv("C:/curso_r/dados/exemplo1.csv")
 exemplo1_base
 
+# o mesmo que:
+exemplo1_base <- read.csv("exemplo1.csv", 
+                          sep = "," ,
+                          dec = "." )
+
 # Utilizando file.choose()
 exemplo1_base <- read.csv(file.choose())
 
-# Tidyverse - readr
+# com o readr (tidyverse) 
 exemplo1_tdv  <- read_csv("C:/curso_r/dados/exemplo1.csv")
 head(exemplo1_tdv, 16)
 
 # ou ainda, utilizar o file.choose
 exemplo1_tdv <- read_csv(file.choose())
 
-# como o diretÛrio foi fixado, basta chamar o nome do arquivo
+# como o diret√≥rio foi fixado, basta chamar o nome do arquivo
 exemplo1_tdv <- read_csv("exemplo1.csv")
 
+# com data.table()
+exemplo1_fread <- fread("exemplo1.csv")
+# o mesmo que:
+exemplo1_fread <- fread("exemplo1.csv", dec = ".")
 
-## Separado por ponto e virgula ----
+# sempre lembre de consultar os comandos
+?fread
+
+###################################################
+## Separado por ponto e virgula e decimal ","----
+###################################################
 
 # Base do sistema
 exemplo2_base <- read.csv2("exemplo2.csv")
@@ -45,56 +63,106 @@ head(exemplo2_base)
 exemplo2_tdv  <- read_csv2("exemplo2.csv")
 head(exemplo2_tdv)
 
-# Lendo os dados do excel
-library(readxl)
-exemplo4  <- read_excel("exemplo4.xlsx")
+# data.table - fread
+exemplo2_fread <- fread("exemplo2.csv", 
+                       dec = ",")
 
-# Importar a segunda planilha
-exemplo4_s2  <- read_excel("exemplo4.xlsx", 
-                           3sheet = 2)
+# lembre de observar a estrutura do arquivo baixado
+glimpse(exemplo2_fread)
+str(exemplo2_fread)
 
-# Tidyverse - o problema do encoding
+
+#------------------------------------
+# escolher colunas, limitar n¬∫ de linhas e pular linhas
+
+# com o readr - read_csv e read_csv2 ----
+## selecionar as 5 primeiras linhas
+ex1_readr <- read_csv("exemplo1.csv", 
+                      n_max = 5)
+ex1_readr
+
+## pular linhas
+ex2_readr <- read_csv("exemplo1.csv", 
+                      skip = 5)
+                      
+
+# com fread() ----
+## selecionar as 5 primeiras linhas
+ex1_fread <- fread("C:/curso_r/dados/exemplo1.csv",
+                   nrows = 5)
+ex1_fread
+
+## selecionar as 3 primeiras colunas
+ex2_fread <- fread("C:/curso_r/dados/exemplo1.csv",
+                   select = 1:3)
+ex2_fread
+
+## pular linhas
+ex3_fread <- fread("C:/curso_r/dados/exemplo1.csv",
+                   skip = 3)
+ex3_fread
+
+
+
+########################################################
+## O problema do encoding - predominante no tidyverse ##
+########################################################
+
 erro <- read_csv2("dados_sociais.csv")
-erro
+head(erro$municipio, 15)
 
 correto  <- read_csv2("dados_sociais.csv", 
                       locale = locale(encoding = "Latin1"))
 correto
 
+correto
+
+
+##########################
+## Ler dados do DATASUS ##
+##########################
+library(read.dbc) # verifique se o pacote est√° instalado
+
+siahsus <- read.dbc("RDSE1701.dbc")
+
 ################
-# ExercÌcio 1 #
+# Exerc√≠cio 1 #
 ###############
 # baixe o arquivo exemplo2.csv
 
 # qual a classe do banco de dados?
 
-# quais as classes das vari·veis do banco?
+# quais as classes das vari√°veis do banco?
 
-# quais os nomes das vari·veis do banco? crie um vetor
+# quais os nomes das vari√°veis do banco? crie um vetor
 
 # como visualizar esses dados?
 
-# como extrair a mÈdia da esperanÁa de vida?
+# como extrair a m√©dia da esperan√ßa de vida?
 
-# qual o m·ximo e o minimo desta vari·vel?
+# qual o m√°ximo e o minimo desta vari√°vel?
 
 
-#------------------------------------
-# Baixar dados com fread()
-# Para isso, chamar o pacote data.table
-library(data.table)
-ex1_fread <- fread("C:/curso_r/dados/exemplo1.csv",
-                   nrows = 5)
-ex1_fread
 
-#------------------------------------
-# Baixar dados do xlsx e xls
+###############################
+# Lendo os dados do excel ----
+###############################
 
-# Lendo os dados do excel
-ex4 <- read_excel("C:/curso_r/dados/exemplo4.xlsx")
+library(readxl)
+exemplo4  <- read_excel("exemplo4.xlsx")
 
 # Importar a segunda planilha
-ex4_s2 <- read_excel("C:/curso_r/dados/exemplo4.xlsx", sheet = 2)
+exemplo4_s2  <- read_excel("exemplo4.xlsx", 
+                           sheet = 2)
+
+# Importar a segunda planilha - pelo nome
+exemplo4_s2  <- read_excel("exemplo4.xlsx", 
+                           sheet = "mtcars")
+
+
+# Exerc√≠cio:
+# leia todas as planilhas presentes no arquivo exemplo4.xlsx
+
 
 #------------------------------------
 # Baixar dados dbc (DATASUS)
@@ -120,8 +188,8 @@ write.table(exemplo1_base, "meu_exemplo3.csv",
 ?write.table
 
 #-------------------------------------------------------
-# È possÌvel exportar com o data.table
-# nessa caso, o row.names j· est· falso de forma padr„o
+# √© poss√≠vel exportar com o data.table
+# nessa caso, o row.names j√° est√° falso de forma padr√£o
 library(data.table)
 ?fwrite
 fwrite(mpg, "C:/curso_r/meu_exemplo_data_table.csv",
