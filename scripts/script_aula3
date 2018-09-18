@@ -29,3 +29,5 @@ ds_sp <- filter(ds, municipio == "SÃO PAULO")
 ds2 <- filter(ds, (ano == 2000  | ano == 1991) &
          uf == 35 & 
          esp_vida >= 70) 
+         
+
