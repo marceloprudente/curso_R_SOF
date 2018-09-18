@@ -122,38 +122,24 @@ any(...)
 
 # Parte 4
 
-## Exercício Seguro Demprego
+## Exercício Censo Escolar
+O objetivo deste exercício é identificar a média de idade, tipo de contrato e formação dos docentes entre universidades públicas e privadas. Além disso, devemos identificar os cursos mais populares, o percentual de alunos em universidades públicas e o número de alunos cursando graduação. Para o exercício, utilizaremos a base de dados do Censo Escolar, disponível no sítio do INEP. 
 
-O objetivo desse exercício é identificar se os possíveis beneficiários do seguro desemprego têm direito ao benefício requerido. Assim, devemos identificar se os requerentes estão enquadrados nos requistos legais. Para o exercício, utilizaremos duas bases de dados do governo com identificações simuladas para o exercício:
-- RAIS - com identificação simulada;
-- Seguro Desemprego - com identificação simulada.
+Assim, você deve:
+- Filtrar apenas as instituições categorizadas como Universidades.
+- Encontrar a idade média dos docentes por mantenedora. 
+- O tipo de contrato prevalente entre os docentes nas universidades públicas e privadas.
+- Qual o tipo de formação docente nas universidades públicas e privadas. Há alguma variação regional?
+- Identificar os dez cursos mais populares no país.
+- Contar o número de cursos por instituição e mantenedora: qual delas têm maior variedade de opções?
+- Encontrar percentual de alunos em universidades públicas e privadas.
+- Observar o número de alunos cursando graduação.
 
-Segundo o sítio do [**Ministério do Trabalho**](http://www.caixa.gov.br/beneficios-trabalhador/seguro-desemprego/perguntas-frequentes/Paginas/default.aspx), tem direito ao seguro desemprego o trabalhador que:
-
->* Tiver sido dispensado sem justa causa;
-    
->* Estiver desempregado, quando do requerimento do benefício;
-    
->* Ter recebido salários de pessoa jurídica ou pessoa física equiparada à jurídica (inscrita no CEI) relativos a:
-    + pelo menos 12 (doze) meses nos últimos 18 (dezoito) meses imediatamente anteriores à data de dispensa, quando da primeira solicitação;
-    + pelo menos 9 (nove) meses nos últimos 12 (doze) meses imediatamente anteriores à data de dispensa, quando da segunda solicitação; e
-    + cada um dos 6 (seis) meses imediatamente anteriores à data de dispensa, quando das demais solicitações;
-* Não possuir renda própria para o seu sustento e de sua família;
-* Não estiver recebendo benefício de prestação continuada da Previdência Social, exceto pensão por morte ou auxílio-acidente.
-
-
-Para o exercício, vamos flexibilizar esses requisitos: *não possuem renda própria para o sustento da sua família* e *não estejam recebendo BPC*. Considere a quantidade de reincidências como o número de vezes que o indivíduo pediu o auxílio desemprego anteriomente. 
-
-Assim:
-- Cruze a base RAIS e Seguro Desemprego.
-- Encontre quantos indivíduos estão aptos a receber o benefício do seguro-desemprego. 
-- Crie e exporte uma tabela contendo quantos indivíduos podem receber o seguro desemprego segregando os dados pelos três níveis de período de dispensa. 
 
 ## Passos Necessários
 1.	Baixar os dados de forma eficiente. 
 2.	Verificar a estrutura dos dados.
 3.	Pedir o sumário dos dados
-4.  Trabalhar com as datas
-5.	Cruzar dados encontrando as chaves em comum.
-6.  Fazer as estimativas apontadas
-7.  Exportar os dados em csv.
+4.  Cruzar dados encontrando as chaves em comum.
+5.  Fazer as estimativas apontadas
+6.  Exportar os dados em csv.
