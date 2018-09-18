@@ -72,12 +72,12 @@ A realização do exercício envolve os seguintes passos:
 
 
 # Parte 3 - RAIS 
-- Esse exercício tem por objetivo ampliar a capacidade de analisar dados. Envolve manipulação de datas, uso dos filtros (com operadores lógicos), mesclar dados (join), o uso do if_else e a confecção de algums sumários estatíticos . Vamos fazer algumas inferências com a base RAIS.
+Esse exercício utiliza a base de dados abertos da RAIS com a adição de uma coluna fictícia do PIS e tem por objetivo ampliar a capacidade de analisar dados. Envolve manipulação de datas, uso dos filtros (com operadores lógicos), mesclar dados (join), o uso do if_else e a confecção de algums sumários estatíticos . Vamos fazer algumas inferências com a base RAIS.
 
-# Básico - exercício com datas
+## Básico - exercício com datas
 - Baixe a RAIS
 - Peça a estrutura dos dados e verifique se os números (a exemplo do valor das remunerações) foram baixados corretamente.
-- Transforme todas as datas de *character* em *date* (se necessário, use o paste)
+- Transforme todas as datas de *character* em *date* (se necessário, use o comando *paste0*)
 
 ## Dados sobre qualificação e remuneração
 - Na base RAIS, identifique quais as profissões que têm a maior qualificação. 
@@ -86,7 +86,6 @@ A realização do exercício envolve os seguintes passos:
     + E por sexo? 
     + E por raça e sexo?
 
-
 ## Duplicados e número de empregos
 - Identificar os casos duplicados no banco RAIS. Quantos são?
     + Em seguida, filtrar apenas os casos que contenham registros duplicados em um objeto chamado *rais2*. Com isso, você poderá identificar qual indivíduo teve mais de um emprego em um exercício. 
@@ -94,7 +93,7 @@ A realização do exercício envolve os seguintes passos:
 # dica: utilizar
 any(...)
 ```
-> **Atenção:** cada PIS é um caso que pode ter inúmeras observações. Portanto, pense bem na forma de filtar os dados. 
+> **Atenção:** cada PIS Fictício é um caso que pode ter inúmeras observações. Portanto, pense bem na forma de filtar os dados. 
 
 - Responda: qual o número máximo de empregos que um indivíduo teve em um ano
     + faça uma tabela com a contagem de indivíduos por número de empregos por ano.
@@ -111,8 +110,6 @@ any(...)
     + se o emprego com o vínculo ativo em 2015 é anterior a 2015.
 
     
-
-
 
 ## Passos Necessários
 1.	Baixar os dados de forma eficiente. 
