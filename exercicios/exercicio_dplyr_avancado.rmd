@@ -1,5 +1,5 @@
 # Parte 1 - Seguro Defeso e Bolsa Família
-## Exercício
+
 Na prática, a análise de dados envolve uma série encadeada de operações. Vamos utilizar o caso do seguro defeso para ilustrar a aplicação da manipulação de dados. 
 
 ### Caso Seguro Defeso - Bolsa Família
@@ -21,9 +21,9 @@ VIII - desligamento em razão de posse do beneficiário do Programa Bolsa Famíl
 
 Apesar da ausência dessa restrição no comando legal, não há nenhuma estimatida de quantos indivíduos acumulam recebimento dos dois programas. Tampouco, não há estimativa da possível economia aos cofres públicos que uma possível restrição na concessão desses benefícios pode gerar.
 
-## Resultado esperado
+## Exercício
 
-Utilizando os seus conhecimentos em manipulação de dados, descubra:
+Utilizando os seus conhecimentos em manipulação de dados:
 
 1. Identificar qual tipo de seguro-defeso tem o maior número de beneficiários. 
 2. Identifique qual o percentual de pescadores beneficados em relação à população municipal.
