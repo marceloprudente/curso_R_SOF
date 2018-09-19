@@ -149,4 +149,96 @@ esp_vida <- ds %>%
             mediana = median(esp_vida),
             populacao = sum(pop))
 
+##############################
+## Join(): melhor que procv ##
+##############################
+df1 <- tibble(letras = letters[1:8],
+              num_a = 1:8 )
+
+df2 <- tibble(letras = letters[5:12], 
+              num_b = 5:12)
+
+df3 <- tibble(LETRAS = letters[5:20], 
+             num_c = 5:20)
+
+# junção natural
+mesclado1 <- inner_join(df1, df2)
+
+# junção natural
+# preferível espeficicar chave
+mesclado1 <- inner_join(df1, df2, by = "letras")
+
+# não funciona: precisa identificar chave
+mesclado2 <- inner_join(df1, df3)
+
+# funciona: identifica as chaves
+mesclado2 <- inner_join(df1, df3, 
+                       by = c("letras" = "LETRAS"))
+
+# full_join()
+mesclado_full <- full_join(df1, df3, 
+                       by = c("letras" = "LETRAS"))
+mesclado_full
+
+# left_join()
+mesclado_left <- left_join(df1, df3, 
+                       by = c("letras" = "LETRAS"))
+mesclado_left
+
+# right_join()
+mesclado_right <- right_join(df1, df3, 
+                           by = c("letras" = "LETRAS"))
+mesclado_right
+
+# anti_join()
+mesclado_anti1 <- anti_join(df1, df3, 
+                           by = c("letras" = "LETRAS"))
+mesclado_anti1
+
+# modificando a posição dos bancos
+mesclado_anti2 <- anti_join(df3, df1, 
+                            by = c("LETRAS" = "letras"))
+mesclado_anti2
+
+
+#####################
+## OUTRAS FUNÇÕES  ##
+#####################
+
+fies <- data.table::fread("fies_sample.csv",
+                          dec = ",")
+
+# valores duplicados
+fies %>% 
+  select(CO_CONTRATO_FIES) %>% 
+  duplicated() %>% 
+  sum()
+
+fies %>% 
+  summarise(unicos = n_distinct(CO_CONTRATO_FIES))
+
+
+fies %>% 
+  group_by(SG_UF) %>% 
+  summarise(unicos = n_distinct(CO_CONTRATO_FIES)) %>% 
+  arrange(-unicos)
+
+# selecionar apenas contratos unicos
+fies_sub <- fies %>% 
+  distinct(CO_CONTRATO_FIES, .keep_all = TRUE)
+
+# contar observações: n()
+fies_sexo_raca <- fies_sub %>% 
+  group_by(DS_SEXO, DS_RACA_COR) %>% 
+  summarise( total = n())
+
+# mensalidade uf
+fies_sub %>% 
+  group_by(SG_UF) %>% 
+  summarise(media = mean(VL_MENSALIDADE, na.rm = TRUE)) %>% 
+  mutate(acima_med = ifelse(media > mean(media), 1 ,0),
+         ac_med2 = ifelse(media > mean(media), "Acima da média", "Abaixo da Média"), 
+         ac3 = ifelse(media < 900, 1,
+                      ifelse(media > 1000, 3, 2)))
+
 
