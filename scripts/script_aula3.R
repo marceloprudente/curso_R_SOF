@@ -241,4 +241,131 @@ fies_sub %>%
          ac3 = ifelse(media < 900, 1,
                       ifelse(media > 1000, 3, 2)))
 
+# any()----
+df_na <- tibble(letras = LETTERS[1:11],
+                idade = c(seq(10, 80, 10), NA, NA, NA))
 
+any(is.na(df_na))
+
+# baixar os dados
+dom <- read_csv2("C:/curso_r/dados/dados_domiciliares.csv", 
+                 locale = locale(encoding = "Latin1"))
+
+# olhar os dados
+glimpse(dom)
+
+# nome das colunas
+colnames(dom)
+
+# domicilio tem idoso
+dom <- dom %>% 
+  group_by(domicilio) %>% 
+  mutate(dom_idoso = ifelse(any(idade >= 60), 
+                            "Dom. tem idoso", "Não tem idoso"))
+
+# quantos domicílios tem idosos
+dom %>% 
+  distinct(dom_idoso , .keep_all = TRUE) %>% 
+  group_by(dom_idoso) %>% 
+  count()
+
+# cut() ----
+# cortar as idades em intervalos de 5 anos
+dom <- dom %>% 
+  mutate( idade_cut = cut(idade, seq(0,100, 5)))
+
+# cortar usando age.cat
+args(age.cat)
+
+dom <- dom %>% 
+  mutate(age_cat = age.cat(idade, upper = 90, by = 5))
+
+# paste() ----
+# Irmãos Peixoto
+irmaos <- c("Edgar", "Edclésia", 
+            "Edmar", "Edésia", "Edésio")
+
+# Como colocar os sobrenomes?
+paste(irmaos, "Peixoto")
+paste(irmaos, "Peixoto", sep = ",")
+paste(irmaos, "Peixoto", sep = "")
+paste0(irmaos, "Peixoto")
+
+# uso do paste
+x = 1:10
+y = 51:60
+paste(x, y)
+paste0(x, y)
+paste(x, y, sep = ".") %>% as.numeric()
+paste0(x, y) %>% as.numeric()
+
+# uso do paste no dplyr
+dom <- dom %>% 
+  mutate(sexo_cor = paste(sexo, "-", cor)) 
+
+head(dom$sexo_cor)
+
+# agrupado
+dom %>% 
+  group_by(sexo_cor) %>% 
+  count()
+
+# substr(): cortar dados
+x = "palavra"
+substr(x, 1, 1)
+substr(x, 1, 2)
+substr(x, 3, 4)
+substr(x, 3, nchar(x))
+
+# gsub() ----
+# funcionamento do gsub
+gsub("-", "@", "curso-hotmail.com")
+
+# exemplo com números
+x = c("3,8", "4,9", "5,5")
+as.numeric(x)
+gsub(",", ".", x) %>%  as.numeric()
+
+# aplicando a um data.frame
+dom %>% 
+  mutate(sexo_cor2 = gsub("-", "@", sexo_cor)) %>% 
+  select(sexo_cor2) %>%  #selecionar variável de interesse
+  head(10) # mostrar 10 primeiros
+
+# lead() e lad() ----
+x = 1:10
+# uma defasagem
+lag(x)
+# duas defasagens
+lag(x, 2)
+
+# adiantar uma vez 
+lead(x)
+
+# adiantar duas vezes
+lead(x, 2)
+
+# criar uma série
+df = tibble(a = rep(1:5, 3), 
+            b = rnorm(15, 15, 10))
+
+# lead e lag
+df %>% 
+  mutate(c = lead(b, 1), 
+         d = lag(b, 2))
+
+# lead e lag comd dados sociais
+TO <- ds %>% 
+  filter(uf == "11") %>% 
+  select(ano:municipio, rdpc)
+
+# exibir primeiras linhas
+head(TO)
+
+# lead
+TO <- TO %>%  ungroup %>% 
+  group_by(cod_ibge) %>% 
+  mutate(lag_rdpc = lag(rdpc), 
+         var_rdpc = (rdpc - lag_rdpc)/ lag_rdpc,
+         var_rdpc_pec = paste(round(var_rdpc*100, 2), "%"))
+tail(TO)
