@@ -1,10 +1,9 @@
-Gráficos com ggplot2()
+Untitled
 ================
 Marcelo Prudente
 20 de setembro de 2018
 
 Tipos de gráficos
-=================
 
 Tipos de gráficos
 -----------------
@@ -37,16 +36,14 @@ Sistema
 hist(dados_sociais$esp_vida)
 ```
 
-
 <img src="figuras_ggplot/unnamed-chunk-2-1.png" width="912" />
-
 
 ``` r
 # Diagrama de Caixas
 with(dados_sociais, boxplot(esp_vida  ~factor(uf)))
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-2-2.png)
+<img src="figuras_ggplot/unnamed-chunk-2-2.png" width="912" />
 
 ``` r
 # Barras
@@ -54,14 +51,14 @@ p <- table(dados_sociais$uf)
 barplot(p)
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-2-3.png)
+<img src="figuras_ggplot/unnamed-chunk-2-3.png" width="912" />
 
 ``` r
 # Dispersão
 with(dados_sociais, plot(esp_vida, log(rdpc)))
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-2-4.png)
+<img src="figuras_ggplot/unnamed-chunk-2-4.png" width="912" />
 
 -   Tente no seu pc
 
@@ -111,7 +108,7 @@ qplot(esp_vida, data = dados_sociais)
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-3-1.png)
+<img src="figuras_ggplot/unnamed-chunk-3-1.png" width="912" />
 
 ``` r
 # Boxplot
@@ -119,7 +116,7 @@ qplot(x = factor(uf),y = esp_vida,
       data = dados_sociais, geom = "boxplot")
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-3-2.png)
+<img src="figuras_ggplot/unnamed-chunk-3-2.png)
 
 qplot() em ação
 ---------------
@@ -156,7 +153,9 @@ g <- ggplot(dados_sociais, aes(esp_vida, log(rdpc)) )
 g
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-5-1.png) - O que você vê?
+<img src="figuras_ggplot/unnamed-chunk-5-1.png" width="912" /> 
+
+- O que você vê?
 
 ggplot(): especificando a camada geométrica
 -------------------------------------------
@@ -167,7 +166,7 @@ ggplot(): especificando a camada geométrica
 g + geom_point()
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-6-1.png)
+<img src="figuras_ggplot/unnamed-chunk-6-1.png" width="912" />
 
 Em outras palavras, especificamos que os elementos do gráfico devem ser pontos. Também seria possível pedir linhas. Veja o que ocorre:
 
@@ -175,7 +174,7 @@ Em outras palavras, especificamos que os elementos do gráfico devem ser pontos.
 g + geom_line()
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-7-1.png)
+<img src="figuras_ggplot/unnamed-chunk-7-1.png" width="912" />
 
 ggplot(): indo além dos argumentos
 ----------------------------------
@@ -186,7 +185,7 @@ Quando especificamos uma camada geométrica, podemos alterar os seus atributos i
 g + geom_point(colour = "red")
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-8-1.png)
+<img src="figuras_ggplot/unnamed-chunk-8-1.png" width="912" />
 
 Ainda, é possível especificar ou a cor, o tamanho dos pontos de acordo com faixas populacionais e o formato dos pontos.
 
@@ -194,14 +193,16 @@ Ainda, é possível especificar ou a cor, o tamanho dos pontos de acordo com fai
 g + geom_point(aes(size = pop), colour = "red", shape = 2 )
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-9-1.png) Observe o quão versátil pode ser a criação de gráficos: os pontos podem variar de acordo com o ano em que cada valor foi obervado. Observe também que é possível impelir o ano a ser um *factor* diretamente na fórmula.
+<img src="figuras_ggplot/unnamed-chunk-9-1.png" width="912" />
+
+Observe o quão versátil pode ser a criação de gráficos: os pontos podem variar de acordo com o ano em que cada valor foi obervado. Observe também que é possível impelir o ano a ser um *factor* diretamente na fórmula.
 
 ``` r
 g + geom_point(aes(colour = factor(ano), 
                    shape = factor(ano))) 
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-10-1.png)
+<img src="figuras_ggplot/unnamed-chunk-10-1.png)
 
 ggplot(): preciso saber de todos os verbos e todas as formas geométricas?
 -------------------------------------------------------------------------
@@ -226,7 +227,7 @@ ggplot(dados_sociais, aes(x = esp_vida)) +
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-11-1.png)
+<img src="figuras_ggplot/unnamed-chunk-11-1.png" width="912" />
 
 Note o belo gráfico abaixo! Adicionamos mais uma camada ao histrograma, uma linha com a contagem dos casos, e controlamos as cores, o tamanho e o tipo da linha.
 
@@ -236,7 +237,7 @@ ggplot(dados_sociais, aes(x = esp_vida)) +
   geom_freqpoly( size = 1.5, color = "green", lty = 2)
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-12-1.png)
+<img src="figuras_ggplot/unnamed-chunk-12-1.png" width="912" />
 
 Densidade
 ---------
@@ -248,7 +249,7 @@ ggplot(dados_sociais, aes(x = esp_vida, color = factor(ano))) +
   geom_density(aes(fill = factor(ano), alpha = 1))
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-13-1.png)
+<img src="figuras_ggplot/unnamed-chunk-13-1.png)
 
 stat\_summary()
 ---------------
@@ -268,7 +269,7 @@ ggplot(rdpc_uf, aes(factor(uf), rdpc)) +
   stat_sum( geom = "bar")
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-14-1.png)
+<img src="figuras_ggplot/unnamed-chunk-14-1.png" width="912" />
 
 Ou mesmo diretamente no gráfico por meio do **stat\_summary().**
 
@@ -278,7 +279,7 @@ dados_sociais %>%
   stat_summary(fun.y = "mean", geom = "bar")
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-15-1.png)
+<img src="figuras_ggplot/unnamed-chunk-15-1.png" width="912" />
 
 Veja que o *stat\_summary* solicita qual a função transformará o valor de y e qual o *geom* será utilizado. Mais prático, não?
 
@@ -294,7 +295,7 @@ dados_sociais %>%
   stat_summary(fun.y = "mean", geom = "line") 
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-16-1.png)
+<img src="figuras_ggplot/unnamed-chunk-16-1.png" width="912" />
 
 Barras por grupo
 ----------------
@@ -309,7 +310,7 @@ stat_summary(fun.y = "mean",
 g4
 ```
 
-<img src="ggplot_github_files/figure-markdown_github/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="figuras_ggplot/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" />
 
 Subgráficos
 ===========
@@ -328,7 +329,7 @@ p <- dados_sociais %>%
 p + facet_grid(. ~ regiao)
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-18-1.png)
+<img src="figuras_ggplot/unnamed-chunk-18-1.png" width="912" />
 
 facet()
 -------
@@ -340,7 +341,7 @@ facet()
 p + facet_wrap( ~ regiao, ncol = 2)
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-19-1.png)
+<img src="figuras_ggplot/unnamed-chunk-19-1.png" width="912" />
 
 Camadas de ajuste
 =================
@@ -366,7 +367,7 @@ graf <- graf +
 graf
 ```
 
-<img src="ggplot_github_files/figure-markdown_github/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="figuras_ggplot/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 Ajustar as escalas
 ------------------
@@ -384,7 +385,7 @@ graf <- graf +
 graf
 ```
 
-<img src="ggplot_github_files/figure-markdown_github/unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="figuras_ggplot/unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
 
 Temas
 =====
@@ -399,7 +400,7 @@ theme
 graf +  theme_minimal()
 ```
 
-<img src="ggplot_github_files/figure-markdown_github/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+<img src="figuras_ggplot/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 Crie seu próprio tema
 ---------------------
@@ -418,4 +419,4 @@ graf +  theme(
         legend.position="bottom")
 ```
 
-<img src="ggplot_github_files/figure-markdown_github/unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="figuras_ggplot/unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
