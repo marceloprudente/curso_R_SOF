@@ -84,7 +84,7 @@ autoplot(ipca) +
   theme_bw()
 ```
 
-<img src="figuras_pacotes_selecionados/unnamed-chunk-5-1.png" width="912" />
+<img src="figuras_pacotes_selecionados/unnamed-chunk-5-1.png" width="800" />
  
 Charts
 ------
