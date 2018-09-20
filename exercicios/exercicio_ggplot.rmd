@@ -1,5 +1,8 @@
 # Exercício ggplot
 
+Lembre-se de carregar o pacote *tidyverse*.
+
+
 ## Exercício 1:
 
 Com banco de alunos do Censo Escolar:
@@ -38,5 +41,5 @@ rank()
 - em cada gráfico, lembre-se de:
     + dar um título ao gráfico, bem como nomear os eixos *x* e *y*
     + aplicar um dos temas padronizados do ggplot à sua escolha.
-    + 
+    + coloque os gastos nos eixos na forma de milhões de R$.
 
