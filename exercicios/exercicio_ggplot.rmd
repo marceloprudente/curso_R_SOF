@@ -1,0 +1,27 @@
+# Exercício ggplot
+
+## Exercício 1:
+
+Com banco de alunos do Censo Escolar:
+- encontre o número de alunos matriculados nos nas universidades públicas e privadas por Unidade da Federação. 
+- faça três gráficos:
+    + um gráfico de barras com o total de alunos matriculados por UF. 
+    + um gráfico de barras com o total de alunos matriculados por UF, segregando os dados entre os matriculados em instituições públicas e privadas.
+    + um histograma da idade dos alunos
+
+- em cada gráfico, lembre-se de:
+    + dar um título ao gráfico, bem como nomear os eixos *x* e *y*
+    + aplicar um dos temas padronizados do ggplot à sua escolha.
+ 
+## Exercício 2: 
+Com a base de dados *painel_siop*:
+- filtre os gastos do Ministério da Saúde (36000), da Educação (26000) e dos Transportes (39000);
+- sumarize a despesa dos valores liquidados agregando-os por ano e órgão e ano, órgão e Grupo Natureza da Despesa (GND) - portanto, duas tabelas. 
+- faça os seguintes gráficos:
+    + de linha, apontando a evolução do gasto nominal dos órgãos por ano.
+    + de linha para a evolução dos gastos do órgão por ano e GND (selecione apenas GNDs 1, 3 e 4). Para tanto, use o facet.
+    
+- em cada gráfico, lembre-se de:
+    + dar um título ao gráfico, bem como nomear os eixos *x* e *y*
+    + aplicar um dos temas padronizados do ggplot à sua escolha.
+ 
