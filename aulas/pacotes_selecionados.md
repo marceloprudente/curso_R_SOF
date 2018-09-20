@@ -1,4 +1,4 @@
-Pacotes importantes
+Pacotes para baixar dados
 ================
 Marcelo Prudente
 20 de setembro de 2018
