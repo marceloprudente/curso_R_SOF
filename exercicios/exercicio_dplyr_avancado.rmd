@@ -75,7 +75,7 @@ A realização do exercício envolve os seguintes passos:
 Esse exercício utiliza a base de dados abertos da RAIS com a adição de uma coluna fictícia do PIS e tem por objetivo ampliar a capacidade de analisar dados. Envolve manipulação de datas, uso dos filtros (com operadores lógicos), mesclar dados (join), o uso do if_else e a confecção de algums sumários estatíticos . Vamos fazer algumas inferências com a base RAIS.
 
 ## Básico - exercício com datas
-- Baixe a RAIS
+- Baixe o arquivo da RAIS em nossa pasta de dados do curso. Depois, carregue o banco para o **R**.
 - Peça a estrutura dos dados e verifique se os números (a exemplo do valor das remunerações) foram baixados corretamente.
 - Transforme todas as datas de *character* em *date* (se necessário, use o comando *paste0*)
 
