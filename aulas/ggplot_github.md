@@ -405,7 +405,7 @@ graf +  theme_minimal()
 Crie seu próprio tema
 ---------------------
 
-Outra forma de lidar com os dados
+Por fim, você pode especificar os parâmetros do seu tema. Naturalmente, esse passo demandará algum tempo até que possa encontrar o padrão de tema desejado. Contudo, é uma forma bastante versátil de organizar os seus plots. 
 
 ``` r
 graf +  theme(
