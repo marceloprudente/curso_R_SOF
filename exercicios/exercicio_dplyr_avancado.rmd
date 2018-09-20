@@ -41,7 +41,7 @@ Utilizando os seus conhecimentos em manipulação de dados:
 ## Passos necessários
 A realização do exercício envolve os seguintes passos:
 
-1.	Encontrar e baixar os dados do [**Bolsa Família**](http://www.portaldatransparencia.gov.br/download-de-dados/bolsa-familia-pagamentos) e do [**Seguro defeso**](http://www.portaldatransparencia.gov.br/download-de-dados/seguro-defeso) no site do [*portal da transparência*](http://www.portaldatransparencia.gov.br).
+1.	Encontrar e baixar os dados do [**Bolsa Família**](http://www.portaldatransparencia.gov.br/download-de-dados/bolsa-familia-pagamentos) e do [**Seguro defeso**](http://www.portaldatransparencia.gov.br/download-de-dados/seguro-defeso) no site do [*portal da transparência*](http://www.portaldatransparencia.gov.br). Lembre-se: *nossa análise refere-se a janeiro de 2015*.
     + Qual o tamanho dos arquivos? Qual a melhor estratégia para lê-los?
     + Que tal ler algumas linhas para ter uma ideia das variáveis?
     + Qual o separador?
