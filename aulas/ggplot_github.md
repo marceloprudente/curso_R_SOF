@@ -1,4 +1,4 @@
-Untitled
+Gráficos com ggplot2()
 ================
 Marcelo Prudente
 20 de setembro de 2018
@@ -37,7 +37,9 @@ Sistema
 hist(dados_sociais$esp_vida)
 ```
 
-![](ggplot_github_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+<img src="figuras_ggplot/unnamed-chunk-2-1.png" width="912" />
+
 
 ``` r
 # Diagrama de Caixas
