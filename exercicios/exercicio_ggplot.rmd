@@ -24,4 +24,19 @@ Com a base de dados *painel_siop*:
 - em cada gráfico, lembre-se de:
     + dar um título ao gráfico, bem como nomear os eixos *x* e *y*
     + aplicar um dos temas padronizados do ggplot à sua escolha.
+ ## Exercício 3
  
+Ainda com os dados do painel siop:
+
+- Encontre os percentual de gastos por GND das Unidades Orçamentárias do Ministério da Educação (26000) no ano de 2016. 
+- Depois, faça um gráfico de barras com as 10 UOs com maiores gastos, identificando nas barras o GND. 
+```{r}
+# dica:
+rank()
+```
+
+- em cada gráfico, lembre-se de:
+    + dar um título ao gráfico, bem como nomear os eixos *x* e *y*
+    + aplicar um dos temas padronizados do ggplot à sua escolha.
+    + 
+
