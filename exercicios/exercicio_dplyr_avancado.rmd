@@ -42,8 +42,8 @@ Utilizando os seus conhecimentos em manipulação de dados:
 A realização do exercício envolve os seguintes passos:
 
 1.	Encontrar e baixar os dados do [**Bolsa Família**](http://www.portaldatransparencia.gov.br/download-de-dados/bolsa-familia-pagamentos) e do [**Seguro defeso**](http://www.portaldatransparencia.gov.br/download-de-dados/seguro-defeso) no site do [*portal da transparência*](http://www.portaldatransparencia.gov.br). Lembre-se: *nossa análise refere-se a janeiro de 2015*.
-    + Qual o tamanho dos arquivos? Qual a melhor estratégia para lê-los?
-    + Que tal ler algumas linhas para ter uma ideia das variáveis?
+    + Qual o tamanho dos arquivos? Qual a melhor estratégia para lê-los? 
+    + Que tal ler algumas linhas para ter uma ideia das variáveis? Você acha que utilizará todas as variáveis do banco? Há alguma vantagem nisso?
     + Qual o separador?
 2.  Salvar os dados na pasta de dados do seu computador.
 3.  Selecionar o diretório de trabalho
@@ -66,7 +66,7 @@ A realização do exercício envolve os seguintes passos:
 
 # Parte 2 - Seguro Defeso e Bolsa Família: sua política obteve êxito?
 
-- Verifique se a sua indicação de mudança da política deu resultado em janeiro de 2016.
+- Verifique se a sua indicação de mudança da política deu resultado em *janeiro de 2016.*
     + Há ainda beneficiários que recebem Bolsa Família e Seguro Defeso concomitantemente?
 
 
