@@ -1,0 +1,184 @@
+# 
+
+
+```{r}
+
+# limpar ambiente global
+rm(list = ls())
+
+# resolução exercício dplyr avançado
+# pacotes necessários
+library(data.table)
+library(dplyr)
+library(lubridate)
+
+# especificar diretório
+setwd("C:/curso_r/dados")
+
+# listar arquivos
+list.files()
+
+# os arquivos são mto grande, vamos ler as primeiras lihnas
+bf <- fread("201501_BolsaFamiliaFolhaPagamento.csv", dec = ",", 
+            nrows = 3)
+str(bf)
+
+
+########################## 
+# baixando bolsa familia #
+##########################
+
+### DUAS FORMAS DE BAIXAR
+## FORMA 1
+# com read_tsv(), pois o delimitador é "\t"
+bf <- read_tsv("201501_BolsaFamiliaFolhaPagamento.csv",
+               locale = locale(encoding = "Latin1"))
+
+## FORMA 2
+# Cadastros do Bolsa família de Janeiro de 2015
+bf <- fread("201501_BolsaFamiliaFolhaPagamento.csv", 
+            dec =",")
+# objeto muito grande. veja!
+bf_size <- object.size(bf)
+print(bf_size, units = "auto")
+
+# queremos apenas o NIS - coluna 8
+colnames(bf) 
+bf<- fread("201501_BolsaFamiliaFolhaPagamento.csv", 
+           dec =",", select = c(8))
+bf_size <- object.size(bf)
+print(bf_size, units = "auto")
+
+########################## 
+# baixando seguro defeso #
+##########################
+
+# listar arquivo
+list.files()
+
+# baixar arquivo
+pesc<- read_tsv("201501_SeguroDefeso.csv", 
+                locale = locale(encoding = "latin1"))
+
+# ler primeiras linhas
+head(pesc)
+
+
+#################
+# adequar nomes #
+#################
+
+# Função para editar nomes
+adequar_nomes<- function(x){
+  require(stringr)
+  require(stringi)
+  x = stri_trans_general(x, "Latin-ASCII")
+  x = tolower(x)
+  x = str_replace_all(x, "[[:punct:][:space:]]", "_")
+  x
+}
+
+# Adequar nomes do cadastro do Bolsa Família
+colnames(bf)<- adequar_nomes(colnames(bf))
+
+# Adequar nomes do banco Pescador Artesanal
+colnames(pesc)<- adequar_nomes(colnames(pesc))
+
+
+#######################
+# trabalhar com datas #
+#######################
+
+## primeiro, ajeitar a data de referência
+pesc$data_referencia <- paste0("01/",pesc$data_referencia)
+
+# mas podemos fazer isso de forma automática
+
+# vamos escolher todas as colunas que começam com datas
+a <- select(pesc, contains("data")) %>% 
+     colnames() 
+
+# depois, aplicar o comando mutate_at
+pesc<- pesc %>% 
+  mutate_at(.vars = a, funs(dmy))
+
+# se fizermos diretamente, termos o seguinte
+pesc2 <- pesc %>% 
+  mutate_at(.vars = select(pesc, contains("data")) %>% colnames, funs(dmy) )
+
+##########################################
+# calcular o número de bolsas por cidade #
+##########################################
+## dados população - na pasta de dados do curso
+library(readxl)
+pop <- read_excel("pop_2015.xls", sheet = 2)
+glimpse(pop)
+
+# o código ibge tem 7 números, mas precisamos cortar 6
+pop <- pop %>% 
+  mutate(cod_ibge = substr(cod_ibge, 1, 6) %>% as.numeric())
+
+# primeiro passo: contar o número de casos
+t <- pesc %>% 
+  distinct(pis_pescador, .keep_all = T) %>%
+  group_by(codigo_ibge_municipio_pescador) %>%
+  count()
+
+# juntar as bases
+t <- inner_join(t, pop, by = c("codigo_ibge_municipio_pescador" = "cod_ibge"))
+
+# calcular percentual
+t<- t%>% mutate(percentual = (n/pop)*100)
+
+
+##########################
+# analisar seguro defeso #
+##########################
+
+# todas variaveis sao relevantes?
+head(pesc)
+
+# excluir as que não interessam
+pesc <- pesc %>% 
+  select(-c(numero_requerimento, cpf_pescador, numero_rgp, 
+            nome_municipio_pescador, codigofuncao:codigoacao))
+
+# há linhas repetidas?
+pesc <- pesc %>% 
+  mutate(pis_dup = duplicated(pis_pescador))
+
+# contar duplicados
+pesc %>% summarise(unicos = n_distinct(pis_pescador), 
+                   duplicados = sum(pis_dup))
+
+
+# Cruzar bases de dados para descobrir quais os registros repetidos
+recebem_dois<- inner_join(bf, pesc, 
+                          by = c("nis_favorecido" = "pis_pescador"))
+
+
+# Transformar esse banco em um tibble
+glimpse(recebem_dois)
+
+# contar valores por uf
+rcb_uf <- recebem_dois %>% 
+  group_by(uf) %>% 
+  count()
+
+# Gerar estatísticas utilizando o dplyr ----
+library(dplyr)
+
+# Em bases administrativas, parte dos registros podem ser repetidos por alguma razão.
+# Por exemplo, o beneficiário pode ir sacar várias parcelas do benefício em apenas 1 mês
+casos.repetidos <- recebem_dois %>% 
+  group_by(nis_favorecido)%>% 
+  count()%>%
+  filter(n>1)
+
+# Entre os casos repetidos, qual a distribuicao
+cs.rep.res <- casos.repetidos%>%
+  group_by(n)%>%
+  count()
+
+
+``` 
