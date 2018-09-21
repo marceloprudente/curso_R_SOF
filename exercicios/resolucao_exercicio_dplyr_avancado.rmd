@@ -182,3 +182,51 @@ cs.rep.res <- casos.repetidos%>%
 
 
 ``` 
+## Parte 3: RAIS
+
+```{r}
+# na rais, o separador decimal é a vírgula. 
+# por isso, não devemos especificar os decimais
+rais <- data.table::fread("dados_rais.txt", dec = ",")
+
+# adequar nomes
+colnames(rais) <- adequar_nomes(colnames(rais))
+
+
+# verificar estrutura dos dados
+glimpse(rais)
+
+# transformar datas
+
+# primeiro descobrir quais variáveis tem data
+a<- rais %>% 
+  select(contains("data")) %>% 
+  colnames()
+a
+
+rais <- rais %>% 
+  mutate(data_admissao_declarada = dmy(data_admissao_declarada))
+
+
+# Dados sobre qualificação e remuneração
+## Quais profissões têm maior qualificação?
+### para identificar, temos que cruzar os dados do cbo
+cbo <- readxl::read_excel("cbo_rais.xlsx")
+
+# cruzar o cbo com a rais
+rais <- rais %>% 
+  mutate(cbo_ocupacao_2002 = as.numeric(cbo_ocupacao_2002)) %>% 
+  inner_join(cbo)
+
+# dados de ocupação
+esc <- readxl::read_excel("RAIS_vinculos_layout.xls", 
+                  sheet = "escolaridade ou g instruçao")
+
+colnames(esc) <- adequar_nomes(colnames(esc))
+
+rais <- rais %>% 
+  inner_join( esc, by = c("escolaridade_apos_2005"))
+
+
+
+```
