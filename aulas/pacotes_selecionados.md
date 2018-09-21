@@ -37,10 +37,6 @@ Para identificar uma série no BETS, você deve utilizar o comando BETSsearch. P
 args(BETSsearch)
 ```
 
-    ## function (description = "*", src, periodicity, unit, code, start, 
-    ##     view = FALSE, lang = "en") 
-    ## NULL
-
 ``` r
 # procurar dados do IPCA
 fontes_dados_ipca <- BETSsearch("ipca", src = "IBGE") 
@@ -95,7 +91,6 @@ Outro parâmetro interessante do BETS é a criação de gráficos pré-formatado
 ?chart
 ```
 
-    ## starting httpd help server ... done
 
 #### Taxa Selic
 
@@ -107,9 +102,6 @@ chart(ts = "selic")
 
 <img src="figuras_pacotes_selecionados/selic-1.png" width="912" />
 
-    ## function (...) 
-    ## tags$p(...)
-    ## <environment: namespace:htmltools>
 
 #### Ipca e sua meta
 
