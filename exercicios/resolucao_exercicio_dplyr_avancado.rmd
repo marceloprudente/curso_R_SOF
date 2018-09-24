@@ -2,6 +2,9 @@
 
 ## Parte 1: Seguro Defeso e Bolsa Família
 
+
+#### Preparando os dados
+
 ```{r}
 
 # limpar ambiente global
@@ -87,7 +90,9 @@ colnames(bf) <- c("nis_favorecido", "valor_parcela_pbf")
 
 # Adequar nomes do banco Pescador Artesanal
 colnames(pesc)<- adequar_nomes(colnames(pesc))
-
+```
+#### Manipulando os dados
+```{r}
 
 #######################
 # trabalhar com datas #
@@ -131,10 +136,8 @@ pesc <- pesc %>%
   distinct(pis_pescador, .keep_all = TRUE)
 
 
-##########################################
-# calcular o número de bolsas por cidade #
-##########################################
 ## dados população - na pasta de dados do curso
+## para cálculo do percentual de beneficiários por cidade
 library(readxl)
 pop <- read_excel("pop_2015.xls", sheet = 2)
 glimpse(pop)
@@ -142,14 +145,21 @@ glimpse(pop)
 # o código ibge tem 7 números, mas precisamos cortar 6
 pop <- pop %>% 
   mutate(cod_ibge = substr(cod_ibge, 1, 6) %>% as.numeric())
+```
+#### Respostas
 
-# 1. qual tipo de seguro defeso tem maior número de beneficiários
+##### 1. qual tipo de seguro defeso tem maior número de beneficiários
+```{r}
+
 pesc %>% 
   group_by(portaria_defeso_ibama) %>% 
   summarise(n_ben = n()) %>% 
   arrange(-n_ben)
+```
 
-# Número de pescadores em relação à população municipal
+##### 2. Número de pescadores em relação à população municipal
+```{r}
+
 t <- pesc %>% 
   distinct(pis_pescador, .keep_all = T) %>%
   group_by(codigo_ibge_municipio_pescador) %>%
@@ -164,8 +174,10 @@ t<- t%>% mutate(percentual = (n/pop)*100) %>%
   arrange(-percentual)
 
 t
+```
+##### 3. Quantos indivíduos recebem bolsa família e seguro defeso no período?
+```{r}
 
-# 3. Quantos indivíduos recebem bolsa família e seguro defeso no período?
 # Cruzar bases de dados para descobrir quais os registros repetidos
 recebem_dois<- inner_join(bf, pesc, 
                           by = c("nis_favorecido" = "pis_pescador"))
@@ -175,8 +187,10 @@ glimpse(recebem_dois)
 
 # contar quantos recebem os dois:pbf e seguro defeso
 recebem_dois %>% count()
+```
+##### 4. contar valores por uf
+```{r}
 
-# 4. contar valores por uf
 rcb_uf <- recebem_dois %>% 
   group_by(uf_pescador) %>% 
   count()
@@ -197,21 +211,28 @@ casos.repetidos
 casos.repetidos%>%
   group_by(n)%>%
   count()
+```
 # 5. Estime a economia de recursos que a suspensão do 
+```{r}
 # recebimento do Bolsa Família durante o recebimento do seguro defeso 
 # poderá gerar
 
 recebem_dois %>% 
   summarise(economia_pbf = as.numeric(valor_parcela_pbf) %>% sum(na.rm = TRUE))
+```
 
 # 6. sumário de dados por regiao
+```{r}
+
 seg_def_reg <- recebem_dois %>% 
   mutate(regiao = substr(uf_pescador, 1, 1)) %>% 
   group_by(regiao) %>% 
   summarise(n_ben = n(),
             media_ben = mean(valor_parcela))
+```
 
 # 7. Exporte os dados para tabelas em csv
+```{r}
 
 tab1 <- recebem_dois %>% 
   group_by(uf_pescador) %>% 
