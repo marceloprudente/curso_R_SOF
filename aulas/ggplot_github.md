@@ -97,7 +97,8 @@ qplot(): vizualizações rápida
 -   É possível plotar quase tudo com o **qplot**. Entretanto, você não alcançará todo o potencial do ggplot.
 -   **qplot()** é o mesmo que *quick plot* e segue a lógica de camadas. Veja!
 
-![qplot](C:/curso_r_enap/imagens/qplot2)
+
+<img src="figuras_ggplot/qplot.png" width="912" />
 
 -   Veja que é possível criar histogramas e gráficos de caixas com facilidade,
 
@@ -141,7 +142,9 @@ ggplot()
 -   Porém, é possível extrair mais dos gráficos.
 -   A forma básica de expressar o ggplot é a seguinte:
 
-![ggplot](C:/curso_r_enap/imagens/ggplot)
+
+<img src="figuras_ggplot/ggplot.png" width="912" />
+
 
 ggplot(): entendendo os argumentos
 ----------------------------------
