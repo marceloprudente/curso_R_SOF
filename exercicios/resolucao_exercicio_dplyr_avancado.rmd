@@ -212,7 +212,7 @@ casos.repetidos%>%
   group_by(n)%>%
   count()
 ```
-# 5. Estime a economia de recursos que a suspensão do 
+##### 5. Estime a economia de recursos que a suspensão do 
 ```{r}
 # recebimento do Bolsa Família durante o recebimento do seguro defeso 
 # poderá gerar
@@ -221,7 +221,7 @@ recebem_dois %>%
   summarise(economia_pbf = as.numeric(valor_parcela_pbf) %>% sum(na.rm = TRUE))
 ```
 
-# 6. sumário de dados por regiao
+##### 6. sumário de dados por regiao
 ```{r}
 
 seg_def_reg <- recebem_dois %>% 
@@ -231,7 +231,7 @@ seg_def_reg <- recebem_dois %>%
             media_ben = mean(valor_parcela))
 ```
 
-# 7. Exporte os dados para tabelas em csv
+##### 7. Exporte os dados para tabelas em csv
 ```{r}
 
 tab1 <- recebem_dois %>% 
