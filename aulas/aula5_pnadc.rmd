@@ -1,0 +1,527 @@
+
+
+# PNAD CONTÍNUA
+
+
+## PNAD CONTÍNUA
+A lógica computacional da análise dos dados da PNAD Contínua aqui adotada é muito próxima àquela observada com o *dplyr* do *tidyverse*. 
+- Porém, há maior facilidade de acessar os seus dados.
+
+## Survey? 
+Os grandes *surveys*, a exemplo das PNADs e PNAD Contínua, se diferenciam filosoficamente e substantivamente da aborgagem tradicional das amostras aleatórias. 
+Em poucas palavras, a amostragem aleatória não produz estimadores corretos para *surveys* grandes e complexos.
+Em pesquisas domiciliares, se a estratificação envolvesse aleatoriamente indivíduos, seria necessário visitar milhões de lugares para uma pesquisa. 
+
+Por isso, as questões logísticas (custos!) levam a conglomerar as amostras -  concentrar geograficamente as entrevistas é financeiramente mais efetivo.
+
+Nas PNADs e PNAD Contínua há uma amostragem por conclomerados:
+    + A unidade de seleção pode ser o município, que congrega setores censitários, que contém domicílios.
+    + Seleciona-se uma amostra dos municípios, depois uma amostra dos setores censitários, em seguida dos domicílios.
+
+## Analisando surveys
+
+Por conta do seu desenho, a análise de *surveys* não pode ser feita diretamente. 
+AO invés disso, deve-se fazer a "correção"" das unidades primárias amostrais e dos estratos de amostragem.
+    
+Por sorte, para a PNAD Contínua, é possível baixar os dados diretamente já com o tratamento dos dados para a estrutura de *survey*.
+
+Assim, é necessário baixar o pacote **PNADcIBGE**. 
+
+Você pode ver exemplos instrutivos na página de exemplos do autor do pacote, [**Douglas Braga**](http://api.rpubs.com/BragaDouglas/335574). 
+Você observará que a abordagem da análise é um pouco distinta da implementada aqui, pois o autor utiliza o pacote *survey* como base e nós utilizaremos o pacote *srvyr*, que adota a abordagem de análise do *tidyverse*.
+
+```{r eval = FALSE}
+# instalar pacote
+install.packages("PNADcIBGE")
+# carregar pacote
+library(PNADcIBGE)
+
+```
+## PNADCs
+- As PNADs Contínuas têm dois tipos de microdados disponíveis para análise:
+    + Trimestrais
+    + Anuais
+
+## Vantagens do PNADcIBGE
+1. Os dados já são baixados com o desenho de survey.
+2. É possível baixar dados anuais e trimestrais.
+3. É possível baixar apenas algumas variáveis de interesse.
+4. Variáveis carregam seus rótulos
+
+## Baixando os dados da PNADC
+- Não há esforço para baixar a PNADC trimestral:
+
+```{r eval = FALSE}
+# Especifica o ano e o trimestre
+pnadc = get_pnadc(year = 2017, quarter = 4)
+class(pnadc)
+
+```
+
+- Tampouco a anual:
+```{r eval = FALSE}
+# Especifica o ano e a entrevista
+pnadc_anual = get_pnadc(year = 2016, interview = 1)
+
+```
+
+Embora baixar automaticamente seja prático, pode ocorrer eventuais erros de conexão com o *ftp* do IBGE, frustrando a análise. Por isso, recomendo baixar os dados e a documentação *offline*, o que permitirá carregar os dados de forma mais rápida e pronta.
+
+
+## Carregando dados Off-line
+
+- Entrar no [**ftp do ibge**](ftp://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/)
+- Baixar os arquivos da PNAD e o Dicionario_e_input
+
+```{r eval = FALSE}
+# diretório
+setwd("C:/curso_r/dados/PNADC")
+
+# baixar dados
+pnadc <- read_pnadc("PNADC_022018.txt", "Input_PNADC_trimestral.txt")
+
+# incluir rótulos
+pnadc <- pnadc_labeller(pnadc, "dicionario_das_variaveis_PNAD_Continua_microdados.xls")
+
+```
+
+
+Depois de baixarmos os dados e colocarmos os rótulos, é necessário inputar o desenho de *survey* na PNADC.
+
+```{r}
+
+# desenho de survey
+pnadc <- pnadc_design(pnadc)
+
+# transformar em tbl_svy
+pnadc <- as_survey(pnadc)
+
+```
+
+
+
+# Exemplo de tabulações utilizando a PNAD Contínua
+
+## pacote svryr
+Para a análise dos surveys, utilizaremos o pacote **srvyr** que utiliza a sintaxe do *dplyr* para executar as análises de pesquisas amostrais complexas. 
+Porém, aqui sempre utilizaremos o *summarise*, precedido ou não pelo *group_by*.
+
+Portanto, quando lidamos com a PNAD ou com a PNADC substituiremos os comandos usuais, a exemplo de *mean*, *sum* ou *quantile* pelos comandos abaixo. 
+
+- Há cinco comandos principais para a análise:
+    + **survey_mean()**
+    + **survey_ratio()**
+    + **survey_total()**
+    + **survey_quantile()**
+    + **survey_median()**
+
+## Análises: totais survey_total()
+
+Calcula os valores totais de uma variável em surveys complexos.
+
+- **Algumas estimativas**:
+```{r eval = FALSE}
+# população estimada do Brasil em 2017
+pnadc %>% 
+  mutate(one = 1) %>% 
+  summarise(pop_brasil = survey_total(one))
+# população estimadad do Brasil por regiao em 2015
+pnadc %>%
+  mutate(one = 1, 
+         regiao = substr(UPA, 1, 1)) %>% 
+  group_by(regiao)%>%
+  summarize(pop_brasil = survey_total(one))
+```
+- Tente extrair a população por Estado
+
+## Análises: média survey_mean()
+
+Calcula as médias ou proporções em um survey complexo. No primeiro caso, você deve especificar a variável numérica a ter a média calculada (por exemplo, rendimento médio). No segundo caso, o comando calcula o percentual de observações por grupo (percentual de analfabetos no país )
+```{r }
+# rendimento por sexo: rendimento é numerico
+pnadc %>%
+  group_by(V2007)%>%
+  summarize(rendimento = survey_mean(VD4020, na.rm = TRUE))
+
+# percentual de analfabetos
+pnadc %>% 
+  group_by(V3001) %>% 
+  summarise(perc_analfabetos = survey_mean( na.rm = TRUE))
+```
+
+Observe que você pode criar novas variáveis para fazer suas estimativas
+```{r eval = FALSE}
+
+# rendimento por faixa etária
+source("C:/curso_r/funcoes/age_cat.R")
+pnadc %>%
+  mutate(fx_idade = age.cat(V2009, upper = 90)) %>% 
+  group_by(fx_idade)%>%
+  summarise(perc_por_idade = survey_mean(, na.rm = TRUE),
+            rendimento = survey_mean(VD4020, na.rm = TRUE))
+
+```
+- Qual o rendimento médio por sexo e raça?
+
+
+## Análises mediana survey_median()
+Calcula a mediana em surveys complexos.
+
+```{r eval = FALSE}
+# rendimento por sexo
+pnadc %>%
+  group_by(V2007)%>%
+  summarize(rendimento = survey_median(VD4020, na.rm = TRUE))
+
+# rendimento entre os maiores de 30 e menores de 40
+pnadc %>%
+  filter(V2007>= 30 & V2007 <=40 )%>%
+  summarize(rendimento = survey_median(VD4020, na.rm = TRUE))
+
+```
+- Compare a média e a mediana dos salários em uma mesma tabela
+
+## Análises dos quantis survey_quantile()
+
+```{r eval = FALSE}
+# distribuição da renda por quantis
+pnadc %>%
+  summarise(rendimento = 
+              survey_quantile(VD4020, c(0.25, 0.5, 0.75),
+                              na.rm = TRUE, covmat = TRUE))
+
+```
+
+
+As tabulações dos dados da PNADC são muito parecidas com aquelas obtidas no *dplyr* do *tidyverse*.
+
+## Exemplo: Estimativas educacionais
+- A referência do IBGE para estatísticas educacionais é a PNAD Contínua do segundo trimestre. Como estamos utilizando os dados do 2º trimestre de 2018, podemos dizer que esses são os númeroes oficiais 
+
+### Exemplo e exercícios
+
+```{r eval = FALSE}
+pnadc <- pnadc  %>% 
+  mutate(regiao = as.factor(substr(UPA, 1, 1)))
+
+# número e percentual de pessoas com mais de 15 anos
+# analfabetos
+analfabetos_uf <- pnadc %>% filter(V2009 >=15) %>%
+    group_by(UF, V3001)%>%
+    summarise(analf = survey_total( na.rm = T), 
+              analf_perc = survey_mean(na.rm = T))
+
+```
+- **Exercícios**
+
+
+## Baixar pacotes
+```{r eval = FALSE}
+# Pacotes exigidos
+pacotes <- c("survey", "ggplot2", "srvyr")
+
+# carregar lista de uma só vez
+lapply(pacotes, require, character.only = TRUE)
+```
+
+- Para usar o **srvyr**, é necessário transformar o desenho de survey em **tbl_svy**.
+```{r eval = FALSE}
+# Pacotes exigidos
+pnadc <- as_survey(pnadc)
+```
+
+## Algumas análises
+- Tamanho da população estimada no trimestre.
+```{r eval = FALSE}
+# total
+dadosPNADc %>% summarise(survey_total(one, na.rm = T))
+# por uf
+dadosPNADc %>% 
+  group_by(UF)%>%
+  summarise(pop = survey_total( one ,na.rm = T))
+
+```
+
+## Transformando tabelas
+
+```{r eval = FALSE}
+# renda por sexo e raca
+tot_sexo_raca <- pnadc %>% 
+  group_by(V2007, V2010) %>%
+  summarise(total = survey_mean(VD4016, na.rm = T))
+
+# spread: inverte a tabela
+tot_sexo_raca <- tot_sexo_raca %>% 
+  select(V2007:total) %>% 
+  spread(V2007, total)
+
+tot_sexo_raca
+# gather: volta ao formato original
+tot_sexo_raca <- gather(tot_sexo_raca, V2007, value, - V2010)
+
+
+```
+
+
+# Modelagem com survey
+
+## Teste de Hipóteses
+- Vamos testar se a diferença salarial entre homens e mulheres tem significância estatística. 
+```{r eval = FALSE}
+# VD4020 - renda
+# V2007 - sexo
+svyttest(VD4020 ~ V2007, pnadc)
+
+```
+
+## Regressão Linear
+
+- A renda está associada ao nível educacional, à raça, à idade e ao sexo?
+
+- Para regressão com surveys, utilizamos o *svyglm*.
+
+```{r eval = FALSE}
+# o  ~ separa a variável dependente das independentes
+modeloLin <- svyglm(VD4020 ~ VD3001 + V2010 + V2009 + V2007, pnadc)
+summary(modeloLin)
+
+```
+
+
+## Regressões Logísticas
+
+- O que está associado à conclusão de um curso de graduação. 
+```{r eval = FALSE}
+modelo <- svyglm(V3007 ~ V2007 + V2010 + V2009 + regiao, pnadc, family = "binomial")
+summary(modelo)
+```
+
+
+# Concentração de renda
+## convey
+- O Pacote convey permite estimar diversas medidas de concentração de renda para dados provenientes de pesquisas com planos amostrais complexos.
+```{r eval = FALSE}
+library(convey)
+pnadc <- convey_prep(pnadc)
+```
+
+## Índice de Gini 
+
+
+- Para medir a concentração de renda no país por meio do índice de gini, podemos:
+
+```{r eval = FALSE}
+giniHab <- svygini(~VD4020, pnadc, na.rm  =  TRUE)
+giniHab
+
+giniUF <- svyby(~VD4020, by = ~UF, 
+                dadosPNADc, svygini, na.rm  =  TRUE)
+giniUF
+
+gini_regiao <- svyby(~VD4020, by = ~ regiao, 
+                     dadosPNADc, svygini, na.rm  =  TRUE)
+gini_regiao
+```
+
+
+## Curva de Lorenz
+- A Curva de Lorenz é um gráfico utilizado para relacionar a distribuição relativa de renda pelas pessoas. A área entre essa curva e a reta identidade, é uma das formas de definir o coeficiente de Gini.
+```{r eval = FALSE}
+
+curvaLorenz <- svylorenz(~VD4020, pnadc, 
+                         quantiles = seq(0, 1, .05), na.rm  =  TRUE)
+
+```
+
+
+# Calcular decis de renda
+Este artigo documenta como calcular as rendas de acordo com os decis populacionais na PNAD Contínua. Essas são informações relevantes para entender a natureza distributiva das políticas públicas. 
+
+## Qual arquivo devo utilizar?
+
+A referência de rendimentos de todas as fontes é a 1ª e 5ª entrevista anual. São esses os dados que balizam as publicações oficiais do IBGE. Assim, vamos inicialmente seguir os passos abaixo. 
+
+
+#### Primeiro passo: baixar os pacotes
+```{r warning = FALSE, message = FALSE}
+# baixar pacotes
+library(srvyr); library(tidyverse); library(PNADcIBGE); library(lubridate)
+library(convey); library(knitr); library(kableExtra)
+```
+
+#### Segundo passo: ler os arquivos
+```{r message=FALSE, warning=FALSE}
+# fixar diretório
+setwd("C:/curso_r/dados/PNADC")
+pnadc <- read_pnadc("PNADC_2017_entr1_20180426.txt", "Input_PNADC_1entr_2017_20180426.txt")
+pnadc <- pnadc_labeller(pnadc, "dicionario_PNAD_CONTINUA_MICRODADOS_1_visita_2017_20180426.xls")
+deflator <- readxl::read_excel("deflator_2017_pnadc.xls")
+```
+
+
+#### Terceiro passo: aplicar os deflatores
+```{r warning = FALSE, message = FALSE}
+# ajustar classes das variaveis para cruzamento
+deflator <- deflator %>% 
+  mutate(Ano = as.character(Ano),
+    Trimestre = as.character(Trimestre),
+         uf = as.character(uf))
+pnadc$uf <- substr(pnadc$Estrato, 1, 2)
+# cruzar pnadc com deflatores
+pnadc <- inner_join(pnadc, deflator)
+```
+
+
+#### Quarto passo: estruturar os bancos para o survey
+```{r warning = FALSE, message = FALSE}
+# transformar banco em classes de survey
+pnadc <- pnadc_design(pnadc)
+pnadc <- as_survey(pnadc)
+pnadc <- convey_prep(pnadc)
+
+```
+
+## DECIS DA RENDA DOMICILIAR 
+
+Para observar a distribuição da renda na sociedade brasileira, é necessário extrair os decis de renda. Isso é facilmente realizável por meio do pacote *convey* que extrai a curva de lorenz de uma distribiuição - no caso específico, a renda. 
+
+Antes, vamos criar a variável renda domiciliar per capita deflacionada, de acordo com o anexo do IBGE sobre o deflacionamento dos valores da PNADC. 
+```{r warning = FALSE, message = FALSE}
+# variavel deflaciona: rdpc_co2e
+pnadc <- pnadc %>%  mutate(rdpc_co2e = VD5002 * CO2e)
+```
+
+Em seguida, vamos extrair a curva de lorenz. Atenção: é preciso que o objeto seja da classe convey: ver *?convey_prep*. Abaixo, estamos tirando apenas os decis, por isso fizemos uma sequencia de 0 a 0.9 - o equivalente a 10 decis. 
+
+```{r warning = FALSE, message = FALSE}
+# a distribuicao da renda domiciliar per capita
+curvaLorenz <- svylorenz(~ rdpc_co2e, pnadc, quantiles = seq(0, .9, 0.1), 
+                         na.rm  =  TRUE, plot = TRUE)
+
+curvaLorenz
+```
+
+Por meio da distribuição, nota-se o seguinte: os 10% mais pobres apropriam 0,7% da renda, enquanto os mais ricos levam 43,3% (1 - 0,567).
+
+
+Mas como calcular a renda média dos indivíduos em cada faixa de renda e até aquela faixa de renda? Fácil: replicando esses dados para a população. Como os decis representam a 10% da população, vamos encontrar a população geral e calcular o seu decil.
+
+```{r warning = FALSE, message = FALSE}
+# criar variavel para calcular a população
+pnadc <- pnadc %>% mutate(contagem = 1)
+# calcular a população
+pop <- pnadc %>% 
+  summarise(pop = survey_total(contagem , na.rm = TRUE))
+# Cada 10% representa 1/10 da populacao
+pop_decil <- pop$pop/10
+```
+
+Ora, se os 10% mais pobres apropriam 0,7% da renda, então apropriam 0,7% de toda a massa de rendimentos. Então, vamos calcular a massa de rendimento domiciliar per capita (nossa variável de interesse).
+```{r warning = FALSE, message = FALSE}
+# massa de rendimento domiciliar per capita
+massa_ren_dom_pc <- pnadc %>% 
+  summarise(rend_dom_pc = survey_total(VD5002*CO2e, na.rm = TRUE)) 
+```
+
+Agora, fica fácil calcular as fatias de renda para cada grupo. Primeiro, vamos extrair a informação da curva de Lorenz.
+```{r warning = FALSE, message = FALSE}
+# extrai apenas distribuição da renda por decil
+distr_rdpc <- data.frame(curvaLorenz$quantiles)
+
+# transpor o vetor da distribuição percentual da renda 
+# e transformá-lo em um dataframe
+rd <- as.data.frame(t(distr_rdpc))
+```
+
+Com esse vetor em um dataframe, podemos encadear algums cálculos.
+```{r warning = FALSE, message = FALSE}
+# renda por decil - rd
+rd <- rd %>% 
+  mutate(
+         decil = 1:10, # numerar decis
+         x = lead(rdpc_co2e, default = 1), # o primero decil não é 0, mas sim o valor subsequente
+         var = x - rdpc_co2e, # a variacao a cada decil
+         massa = var*massa_ren_dom_pc$rend_dom_pc, # ver a massa de renda de cada decil
+         renda_entre_decis = massa/pop_decil, 
+         renda_ate_decil = (x*massa_ren_dom_pc$rend_dom_pc)/(decil*pop_decil),
+         massa_acum = cumsum(massa)) # apenas para conferir
+```
+Assim, temos a nossa tabela com os valores
+```{r warning = FALSE, message = FALSE}
+
+kable(rd %>% select(-x, - var, )) %>% 
+  kable_styling(bootstrap_options = c("striped", "bordered"), full_width = F, font_size = 10)
+
+```
+
+
+## DECIS DO RENDIMENTO MENSAL EFETIVO DE TODOS OS TRABALHOS PARA PESSOAS DE 14 ANOS OU MAIS DE IDADE
+
+O cálculo dos decis do rendimento efetivo de todos os trabalhos para pessoas de 14 anos ou mais de idade segue a mesma lógica do exercício anterior. Porém, há um pequeno detalhe: a população a ser considerada é distinta. Vamos repetir os procedimentos acima. 
+
+
+Antes, vamos criar a variável de todos os rendimentos (VD4020) deflacionada, de acordo com o anexo do IBGE sobre o deflacionamento dos valores da PNADC. 
+```{r warning = FALSE, message = FALSE}
+# variavel deflaciona: rdpc_co2e
+pnadc <- pnadc %>%  mutate(rd20_co2e = VD4020 * CO2e)
+```
+
+Em seguida, vamos extrair a curva de lorenz. Atenção: é preciso que o objeto seja da classe convey: ver *?convey_prep*. Abaixo, estamos tirando apenas os decis, por isso fizemos uma sequencia de 0 a 0.9 - o equivalente a 10 decis. 
+
+```{r warning = FALSE, message = FALSE, echo = FALSE}
+# a distribuicao da renda domiciliar per capita
+curvaLorenz <- svylorenz(~ rd20_co2e, pnadc, quantiles = seq(0, .9, 0.1), 
+                         na.rm  =  TRUE, plot = TRUE)
+
+curvaLorenz
+```
+
+#### Aqui, o cálculo muda!
+Mas como calcular a renda média dos indivíduos em cada faixa de renda e até aquela faixa de renda? Fácil: replicando esses dados para a população. Como os decis representam a 10% da população, vamos encontrar a população geral e calcular o seu decil. No entanto, a população a ser considerada é distinta da população geral, pois estamos analisando agora a população ocupada com renda. Ou seja, devemos encontrar as informações apenas para essa população
+
+```{r warning = FALSE, message = FALSE}
+# calcular a população
+pop2 <- pnadc %>% 
+  filter(VD4002 == "Pessoas ocupadas" & VD4018 == levels(VD4018)[1]) %>% 
+  summarise(pop = survey_total(contagem))
+
+# Cada 10% representa 1/10 da populacao
+pop_decil_ocupada <- pop2$pop/10
+```
+
+Ora, se os 10% mais pobres apropriam 0,7% da renda, então apropriam 0,7% de toda a massa de rendimentos. Então, vamos calcular a massa de rendimento domiciliar per capita (nossa variável de interesse).
+```{r warning = FALSE, message = FALSE}
+# massa de rendimento todos trabalhos
+massa_ren_todos_trab <- pnadc %>% 
+  summarise(renda_todos_trab = survey_total(VD4020*CO2e, na.rm = TRUE)) 
+```
+
+Agora, fica fácil calcular as fatias de renda para cada grupo. Primeiro, vamos extrair a informação da curva de Lorenz.
+```{r warning = FALSE, message = FALSE}
+# extrai apenas distribuição da renda por decil
+distr_rdpc <- data.frame(curvaLorenz$quantiles)
+
+# transpor o vetor da distribuição percentual da renda 
+# e transformá-lo em um dataframe
+rd <- as.data.frame(t(distr_rdpc))
+```
+
+```{r warning = FALSE, message = FALSE}
+
+rd <- rd %>%
+  mutate(
+         decil = 1:10, # numerar decis
+         x = lead(rd20_co2e, default = 1), # o primero decil não é 0, mas sim o valor subsequente
+         var = x - rd20_co2e, # a variacao a cada decil
+         massa = var*massa_ren_todos_trab$renda_todos_trab, # ver a massa de renda de cada decil
+         renda_entre_decis = massa/pop_decil_ocupada, 
+         renda_ate_decil = (x*massa_ren_todos_trab$renda_todos_trab)/(decil*pop_decil_ocupada),
+         massa_acum = cumsum(massa)) # apenas para conferir
+
+```
+
+```{r warning = FALSE, message = FALSE, echo = FALSE}
+kable(rd %>% select(-x, - var, )) %>% 
+  kable_styling(bootstrap_options = c("striped", "bordered"), full_width = F, font_size = 10)
+
+```
