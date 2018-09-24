@@ -1,5 +1,6 @@
-# 
+# Resolução exercício *dplyr* avançado
 
+## Parte 1: Seguro Defeso e Bolsa Família
 
 ```{r}
 
@@ -45,7 +46,7 @@ print(bf_size, units = "auto")
 # queremos apenas o NIS - coluna 8
 colnames(bf) 
 bf<- fread("201501_BolsaFamiliaFolhaPagamento.csv", 
-           dec =",", select = c(8))
+           dec =",", select = c(8, 11))
 bf_size <- object.size(bf)
 print(bf_size, units = "auto")
 
@@ -57,9 +58,11 @@ print(bf_size, units = "auto")
 list.files()
 
 # baixar arquivo
-pesc<- read_tsv("201501_SeguroDefeso.csv", 
-                locale = locale(encoding = "latin1"))
+pesc<- fread("201501_SeguroDefeso.csv", 
+                dec = ",")
 
+# ver estrutura do banco
+glimpse(pesc)
 # ler primeiras linhas
 head(pesc)
 
@@ -80,6 +83,7 @@ adequar_nomes<- function(x){
 
 # Adequar nomes do cadastro do Bolsa Família
 colnames(bf)<- adequar_nomes(colnames(bf))
+colnames(bf) <- c("nis_favorecido", "valor_parcela_pbf")
 
 # Adequar nomes do banco Pescador Artesanal
 colnames(pesc)<- adequar_nomes(colnames(pesc))
@@ -103,41 +107,10 @@ pesc<- pesc %>%
   mutate_at(.vars = a, funs(dmy))
 
 # se fizermos diretamente, termos o seguinte
-pesc2 <- pesc %>% 
-  mutate_at(.vars = select(pesc, contains("data")) %>% colnames, funs(dmy) )
-
-##########################################
-# calcular o número de bolsas por cidade #
-##########################################
-## dados população - na pasta de dados do curso
-library(readxl)
-pop <- read_excel("pop_2015.xls", sheet = 2)
-glimpse(pop)
-
-# o código ibge tem 7 números, mas precisamos cortar 6
-pop <- pop %>% 
-  mutate(cod_ibge = substr(cod_ibge, 1, 6) %>% as.numeric())
-
-# primeiro passo: contar o número de casos
-t <- pesc %>% 
-  distinct(pis_pescador, .keep_all = T) %>%
-  group_by(codigo_ibge_municipio_pescador) %>%
-  count()
-
-# juntar as bases
-t <- inner_join(t, pop, by = c("codigo_ibge_municipio_pescador" = "cod_ibge"))
-
-# calcular percentual
-t<- t%>% mutate(percentual = (n/pop)*100)
-
-
-##########################
-# analisar seguro defeso #
-##########################
+#pesc <- pesc %>% 
+#  mutate_at(.vars = select(pesc, contains("data")) %>% colnames, funs(dmy) )
 
 # todas variaveis sao relevantes?
-head(pesc)
-
 # excluir as que não interessam
 pesc <- pesc %>% 
   select(-c(numero_requerimento, cpf_pescador, numero_rgp, 
@@ -151,37 +124,107 @@ pesc <- pesc %>%
 pesc %>% summarise(unicos = n_distinct(pis_pescador), 
                    duplicados = sum(pis_dup))
 
+# filtrar apenas casos de 2015- supondo que os casos são duplicados
+# por serem de períodos diferentes
+pesc <- pesc %>% 
+  filter(year(data_emissao_parcela) == 2015 & month(data_emissao_parcela)== 1) %>% 
+  distinct(pis_pescador, .keep_all = TRUE)
 
+
+##########################################
+# calcular o número de bolsas por cidade #
+##########################################
+## dados população - na pasta de dados do curso
+library(readxl)
+pop <- read_excel("pop_2015.xls", sheet = 2)
+glimpse(pop)
+
+# o código ibge tem 7 números, mas precisamos cortar 6
+pop <- pop %>% 
+  mutate(cod_ibge = substr(cod_ibge, 1, 6) %>% as.numeric())
+
+# 1. qual tipo de seguro defeso tem maior número de beneficiários
+pesc %>% 
+  group_by(portaria_defeso_ibama) %>% 
+  summarise(n_ben = n()) %>% 
+  arrange(-n_ben)
+
+# Número de pescadores em relação à população municipal
+t <- pesc %>% 
+  distinct(pis_pescador, .keep_all = T) %>%
+  group_by(codigo_ibge_municipio_pescador) %>%
+  count() %>% 
+  arrange(-n)
+
+# juntar as bases
+t <- inner_join(t, pop, by = c("codigo_ibge_municipio_pescador" = "cod_ibge"))
+
+# calcular percentual
+t<- t%>% mutate(percentual = (n/pop)*100) %>% 
+  arrange(-percentual)
+
+t
+
+# 3. Quantos indivíduos recebem bolsa família e seguro defeso no período?
 # Cruzar bases de dados para descobrir quais os registros repetidos
 recebem_dois<- inner_join(bf, pesc, 
                           by = c("nis_favorecido" = "pis_pescador"))
 
-
 # Transformar esse banco em um tibble
 glimpse(recebem_dois)
 
-# contar valores por uf
+# contar quantos recebem os dois:pbf e seguro defeso
+recebem_dois %>% count()
+
+# 4. contar valores por uf
 rcb_uf <- recebem_dois %>% 
-  group_by(uf) %>% 
+  group_by(uf_pescador) %>% 
   count()
+rcb_uf
 
-# Gerar estatísticas utilizando o dplyr ----
-library(dplyr)
-
-# Em bases administrativas, parte dos registros podem ser repetidos por alguma razão.
-# Por exemplo, o beneficiário pode ir sacar várias parcelas do benefício em apenas 1 mês
+# Atenção: em bases administrativas, parte dos registros podem 
+# aparecer repetidos por alguma razão.
+# no caso abaixo, por conta de nis repetidos no pbf
 casos.repetidos <- recebem_dois %>% 
   group_by(nis_favorecido)%>% 
   count()%>%
   filter(n>1)
 
+casos.repetidos
+
+
 # Entre os casos repetidos, qual a distribuicao
-cs.rep.res <- casos.repetidos%>%
+casos.repetidos%>%
   group_by(n)%>%
   count()
+# 5. Estime a economia de recursos que a suspensão do 
+# recebimento do Bolsa Família durante o recebimento do seguro defeso 
+# poderá gerar
 
+recebem_dois %>% 
+  summarise(economia_pbf = as.numeric(valor_parcela_pbf) %>% sum(na.rm = TRUE))
 
-``` 
+# 6. sumário de dados por regiao
+seg_def_reg <- recebem_dois %>% 
+  mutate(regiao = substr(uf_pescador, 1, 1)) %>% 
+  group_by(regiao) %>% 
+  summarise(n_ben = n(),
+            media_ben = mean(valor_parcela))
+
+# 7. Exporte os dados para tabelas em csv
+
+tab1 <- recebem_dois %>% 
+  group_by(uf_pescador) %>% 
+  summarise(total = n(),
+            valor_pago_pbf = sum(as.numeric(valor_parcela_pbf),  na.rm = TRUE),
+            valor_pago_seg = sum(as.numeric(valor_parcela),  na.rm = TRUE))
+write.table(tab1, "tabela1.csv", sep = ";", dec = ",",
+            row.names = FALSE)
+
+```
+## Parte 2: 
+Repita os procedimentos da parte 1 para os dados de 2016. Você encontrou algum caso em que quem recebe bolsa família recebe seguro defeso? Nesse caso, sua política foi exitosa?
+
 ## Parte 3: RAIS
 
 ```{r}
