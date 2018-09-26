@@ -1,0 +1,65 @@
+# Exercício Final
+
+## Instruções
+O exercício final tem o intuito de consolidar a implementação do uso de dados com o R. 
+
+- A apresentação do trabalho final poderá ser feita por meio de script ou de arquivo em pdf do R Markdown.
+- No caso do script, lembre-se:
+    + de utilizar o "#" para comentar o script separando as respostas
+- No caso do R Markdown, utilize os campos de código para apresentar a sua solução. 
+
+O exercício pressupõe que o aluno já sabe importar arquivos para o R e quais bibliotecas serão necessárias para a análise.
+
+**Prazo**: 22 de outubro de 2018.
+
+
+
+
+## Parte 1
+### Exercício com a base SIOP 
+
+*Dados obtidos no painel do orçamento*.
+
+- Adeque os nomes do banco siop
+- Separe as colunas:
+    + de Órgão Orçamentário em orgao e orgao_desc. 
+    + de Resultado Primário em rp e rp_desc
+    + de Função em funcao e funcao_desc
+Dica: ?separate ou [http://tidyr.tidyverse.org/reference/separate.html]
+
+- Identifique:
+    + os valor total e o percentual pagos por órgão;
+    + os valores pagos por função;
+
+- Calcule o gasto público identificando o gasto primário e financeiro.Transforme essas informações em gráficos.
+    + qual percentual de gasto financeiro e gasto primário?
+    + entre as despesas primárias orbigatórias (RP 1), quais as funções com maior gasto ao longo do tempo? Selecione as 5 maiores despesas (ranquear despesas). 
+    + qual percentual do orçamento é de despesas primária discricionária - compare com os outros tipos de Resultado Primário? O orçamento ficou mais rígido ao longo dos anos?
+    + filtre os dados evidenciando as despesas primárias da função 28 - Encargos Especiais. Depois, encontre os maiores gastos por ação. Quais despesas se destacam? Você as considera como despesas genuínas da União?
+
+## Parte 2    
+### PNAD Contínua
+
+#### Instruções
+- **Para questões 1 a 5**: baixe o arquivo da **PNAD Contínua Anual de 2016 da 5ª entrevista**, que contém informações sobre outras formas de trabalho.
+- **Para questões 6 a 9**: baixe o arquivo da **PNAD Contínua Anual de 2017 da 1ª entrevista**, que contém informações sobre rendimento de outras fontes.
+- Se não conseguir baixar *on-line*, baixe *off-line* de acordo com as infromações contidas na página de [**Douglas Braga**](https://rpubs.com/BragaDouglas/335574) para a análise da PNADc com o PNADcIBGE. 
+- Observe com cuidado as variáveis derivadas.
+- Utilize como guia a [**publicação do IBGE**](https://agenciadenoticias.ibge.gov.br/media/com_mediaibge/arquivos/01324e82a8566b7cfe283fa41ef12d19.pdf)
+
+- Diante disso, encontre:
+
+    1. a produção de bens para consumo próprio por sexo e nível de instrução no Brasil.
+    2. percentual de pessoas que realizam afazeres domésticos por regiões e segundo o sexo.
+    3. média de horas dedicadas pelas pessoas de 14 anos ou mais aos afazeres dométicos por região e segundo o sexo. Também segregue por nível de instrução.
+    4. percentual de pessoas que fazem trabalho voluntário segundo sexo. 
+    5. crie faixas de renda com cortes de R$1.000,00 e verifique qual a relação entre as faixas de renda o trabalho voluntário.
+    6. O percentual de pessoas que recebem BPC-LOAS. Qual a média de idade dessas pessoas?
+    7. O percentual de pessoas que recebem Bolsa Família. Segregue as informações segundo o sexo.
+    8. O rendimento domiciliar médio *per capita* dos que recebem BPC-LOAS segundo a região.
+    9. O rendimento domiciliar médio *per capita* dos que recebem Bolsa Família segundo a região.
+
+- Elabore gráficos para os **itens 8 e 9**. 
+
+- Encontre o índice de gini do rendimento mensal efetivo de todos os trabalhos das regiões brasileiras para os anos de 2012, 2015 e 2017. Transforme essas informações em um gráfico de linha. 
+
