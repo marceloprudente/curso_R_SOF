@@ -28,4 +28,4 @@ De acordo com a Pesquisa Nacional por Amostra de Domicílios Contínua (PNADC), 
 
 ## Exercício 3:
 - Crie uma variável indicando se o indivíduo é branco e verifique qual a renda média dele em relação a outros grupos.
-- Faça uma regressão logística para indicar a relação entre sexo e raça com a remuneração (VD4020). 
+- Faça uma regressão para indicar a relação entre sexo e raça com a remuneração (VD4020). 
