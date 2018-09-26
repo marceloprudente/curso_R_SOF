@@ -363,12 +363,13 @@ deflator <- readxl::read_excel("deflator_2017_pnadc.xls")
 ```{r warning = FALSE, message = FALSE}
 # ajustar classes das variaveis para cruzamento
 deflator <- deflator %>% 
-  mutate(Ano = as.character(Ano),
-    Trimestre = as.character(Trimestre),
-         uf = as.character(uf))
+  mutate(Ano = as.character(ano),
+    Trimestre = as.character(trim),
+         uf = as.character(UF))
 pnadc$uf <- substr(pnadc$Estrato, 1, 2)
 # cruzar pnadc com deflatores
-pnadc <- inner_join(pnadc, deflator)
+pnadc <- inner_join(pnadc, deflator, 
+          by =c("uf", "Ano", "Trimestre"))
 ```
 
 
