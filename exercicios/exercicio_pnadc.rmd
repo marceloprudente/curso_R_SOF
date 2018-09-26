@@ -1,0 +1,31 @@
+# Exercício Pesquisa Nacional de Domicílios Contínua
+
+Lembre-se de:
+- Carregar os pacotes de análise. Utilize os pacotes *PNADcIBGE*, *survey* e *srvyr*.
+
+
+## Exercício 1: frequência à escola.
+
+- A partir da PNADC que aponta dos dados Educacionais, identifique:
+    + % e total de jovens de 4 a 17 anos fora da escola.
+    + % e total de jovens de 5 a 14 anos fora da escola
+    + % e total de jovens de 15 a 17 anos fora da escola.
+    + % e total de crianças de 4 e 5 anos na pré-escola.
+    + % de crianças de 0 a 3 anos em creches.
+
+Tente expressar algumas das relações acima com um gráfico.
+## Exercício 2: 
+
+De acordo com a Pesquisa Nacional por Amostra de Domicílios Contínua (PNADC), a taxa de desemprego refere-se à proporção entre a População Desempregada e a População Economicamente Ativa.
+
+- Determine a taxa de desemprego no Brasil no 2º trimestre de 2018. 
+    + Segregue os dados por região
+    + Qual o desemprego entre os jovens de 14 e 24 anos? E entre as pessoas de 25 a 40 anos?
+    + Há diferença entre a taxa de desemprego de homens e mulheres? Qual a diferença percentual? Faça um teste de hipóteses para determinar se a diferença tem significância estatística.
+    + Qual a taxa de desemprego entre as pessoas com diferentes níveis educacionais?
+    + Modele uma regressão para entender a associação entre as variáveis *sexo, raça, nível educacional e idade* com o fato de o indivíduo estar ou não empregado. 
+    + Repita o modelo e adicione a variável *região*. Essa variável ajuda a entender a variação do desemprego?
+
+## Exercício 3:
+- Crie uma variável indicando se o indivíduo é branco e verifique qual a renda média dele em relação a outros grupos.
+- Faça uma regressão logística para indicar a relação entre sexo e raça com a remuneração (VD4020). 
