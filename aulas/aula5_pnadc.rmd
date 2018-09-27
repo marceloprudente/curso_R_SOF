@@ -437,15 +437,15 @@ rd <- as.data.frame(t(distr_rdpc))
 Com esse vetor em um dataframe, podemos encadear algums cálculos.
 ```{r warning = FALSE, message = FALSE}
 # renda por decil - rd
-rd <- rd %>% 
+rd <- rd %>%
   mutate(
-         decil = 1:10, # numerar decis
-         x = lead(rdpc_co2e, default = 1), # o primero decil não é 0, mas sim o valor subsequente
-         var = x - rdpc_co2e, # a variacao a cada decil
-         massa = var*massa_ren_dom_pc$rend_dom_pc, # ver a massa de renda de cada decil
-         renda_entre_decis = massa/pop_decil, 
-         renda_ate_decil = (x*massa_ren_dom_pc$rend_dom_pc)/(decil*pop_decil),
-         massa_acum = cumsum(massa)) # apenas para conferir
+    decil = 1:10, # numerar decis
+    x = lead(rdpc_co2e, default = 1), # o primero decil não é 0, mas sim o valor subsequente
+    var = x - rdpc_co2e, # a variacao a cada decil
+    massa = var*massa_ren_dom_pc$rdpc_co2e, # ver a massa de renda de cada decil
+    renda_entre_decis = massa/pop_decil, 
+    renda_ate_decil = (x*massa_ren_dom_pc$rdpc_co2e)/(decil*pop_decil),
+    massa_acum = cumsum(massa)) # apenas para conferir
 ```
 Assim, temos a nossa tabela com os valores
 ```{r warning = FALSE, message = FALSE}
