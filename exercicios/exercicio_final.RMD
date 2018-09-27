@@ -41,7 +41,7 @@ Dica: ?separate ou [http://tidyr.tidyverse.org/reference/separate.html]
 ### PNAD Contínua
 
 #### Instruções
-- **Para questões 1 a 5**: baixe o arquivo da **PNAD Contínua Anual de 2016 da 5ª entrevista**, que contém informações sobre outras formas de trabalho.
+- **Para questões 1 a 5**: baixe o arquivo da **PNAD Contínua Anual de 2016 da 5ª entrevista**, que contém informações sobre outras formas de trabalho. (Acesse o o site do ibge ftp://ftp.ibge.gov.br/Trabalho_e_Rendimento/) 
 - **Para questões 6 a 9**: baixe o arquivo da **PNAD Contínua Anual de 2017 da 1ª entrevista**, que contém informações sobre rendimento de outras fontes.
 - Se não conseguir baixar *on-line*, baixe *off-line* de acordo com as infromações contidas na página de [**Douglas Braga**](https://rpubs.com/BragaDouglas/335574) para a análise da PNADc com o PNADcIBGE. 
 - Observe com cuidado as variáveis derivadas.
