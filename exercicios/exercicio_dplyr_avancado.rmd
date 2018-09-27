@@ -106,12 +106,7 @@ any(...)
 - Depois, encontre apenas os casos em que os indivíduos têm dois ou mais vínculos e não foram demitidos no período.
     + Conte o número de casos individuais
     + Quais as profissões mais comuns?
-- Encontre os casos em que os indivíduos têm dois ou mais vínculos, porém em algum momento foram demitidos no período. Depois, com o if_else indique se:
-    + o indivíduo foi admitido no ano de 2015;
-    + se foi admitido em 2015 e permaneceu empregado neste emprego em 2015
-    + se o emprego com o vínculo ativo em 2015 é anterior a 2015.
 
-    
 
 ## Passos Necessários
 1.	Baixar os dados de forma eficiente. 
