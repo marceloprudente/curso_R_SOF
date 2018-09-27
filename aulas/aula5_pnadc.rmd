@@ -218,7 +218,7 @@ analfabetos_uf <- pnadc %>% filter(V2009 >=15) %>%
 ## Baixar pacotes
 ```{r eval = FALSE}
 # Pacotes exigidos
-pacotes <- c("survey", "ggplot2", "srvyr")
+pacotes <- c("survey", "tidyverse", "srvyr")
 
 # carregar lista de uma só vez
 lapply(pacotes, require, character.only = TRUE)
