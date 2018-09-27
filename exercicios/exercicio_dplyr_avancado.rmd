@@ -125,7 +125,7 @@ any(...)
 # Parte 4
 
 ## Exercício Censo Escolar
-O objetivo deste exercício é identificar a média de idade, tipo de contrato e formação dos docentes entre universidades públicas e privadas. Além disso, devemos identificar os cursos mais populares, o percentual de alunos em universidades públicas e o número de alunos cursando graduação. Para o exercício, utilizaremos a base de dados do Censo Escolar, disponível no sítio do INEP. 
+O objetivo deste exercício é identificar a média de idade, tipo de contrato e formação dos docentes entre universidades públicas e privadas. Além disso, devemos identificar os cursos mais populares, o percentual de alunos em universidades públicas e o número de alunos cursando graduação. Para o exercício, utilizaremos a base de dados do Censo Escolar, disponível no sítio do INEP (http://portal.inep.gov.br/microdados). 
 
 Assim, você deve:
 - Filtrar apenas as instituições categorizadas como Universidades.
