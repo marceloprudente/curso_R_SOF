@@ -1,3 +1,3 @@
 # Exercícios resolvidos
 
-Esta pasta contém os exercícios propostos resolvidos. Antes de verificar, tente resolver sem consultar. 
+Esta pasta contém os exercícios propostos resolvidos. Tente resolver sem consultar. 
