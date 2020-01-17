@@ -1,7 +1,7 @@
 # Material de aula
 Esta pasta contém:
 
-- capítulos referente aos assuntos abordados
+- Capítulos referente aos assuntos abordados
     + Aula 1: introdução ao R
     + Aula 2: leitura de dados
     + Aula 3: manipulação de dados
