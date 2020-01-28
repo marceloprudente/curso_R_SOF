@@ -1,9 +1,14 @@
-# Manipulação de dados com *dplyr*
+# Manipulação de dados com dplyr
+# Lembre-se dplyr faz parte do tidyverse
 
-## limpar ambiente global
+## vamos limpar ambiente global
 rm(list = ls())
 
+## Qual o diretório atualmente ativo?
+getwd()
+
 ## Primeiro passo: fixar diretório
+## (se não for o diretório ativo)
 setwd("C:/curso_r/dados")
 
 ## Segundo passo: utilizar pacotes
@@ -15,8 +20,8 @@ ds <- fread("dados_sociais.csv",
             dec = ',')
 
 ## Quarto passo passo: analisar os dados
-glimpse(ds)
-summary(ds)
+glimpse(ds) # ver estrutura dos dados
+summary(ds) # sumário dos dados
 
 # Verbos do *dplyr*----
 
@@ -25,8 +30,7 @@ summary(ds)
 ## apenas ano 2000
 ds_2000 <- filter(ds, ano == 2000)
 ## apenas municipio de aracaju
-ds_ara <- filter(ds, 
-                        municipio == "ARACAJU")
+ds_ara <- filter(ds, municipio == "ARACAJU")
 ## ou municipio de São Paulo
 ds_sp <- filter(ds, municipio == "SÃO PAULO")
 
@@ -51,23 +55,36 @@ table(ds_e1$uf)
 ds_sao<-filter(ds, grepl("São", municipio,
                  ignore.case = TRUE))
 
+# sensível a maiúsculas e minúsculas
+filter(ds, grepl("Ara", municipio))
+filter(ds, grepl("Ara", municipio, ignore.case = TRUE ))
+
+
+# regex
+# podemos utilizar as Expressões Regulares - regex
+# verificar apostila aula 3 - página 8
+filter(dados_sociais, grepl("^São José de", municipio, ignore.case = TRUE))
+
+##############################################
 # select() ----
 
 # selecionar 3 colunas
 ds_select <- select(ds, ano, uf, rdpc)
 
+# mostrar primeiras linhas
 head(ds_select)
 
 # retirar colunas
 ds_select2 <- select(ds, -rdpc, - pop)
 head(ds_select2)
 
-# com vetor
+# selecionar com base em um vetor character
 nome <- c("ano", "uf", "pop")
-ds_select3<- select(ds, nome)
+ds_select3 <- select(ds, nome)
 head(ds_select3)
 
-# selecionar primeras
+# selecionar primeras colunas
+# retirar variável código ibge
 ds_select4 <- select(ds, ano:municipio, -cod_ibge)
 head(ds_select4)
 
@@ -98,8 +115,9 @@ summary(sihsus_2)
 
 ### renomear
 rename(ds, ANO = ano)
+
 #################################
-## PIPE - seu melhor amigo ----
+#### PIPE - seu melhor amigo ----
 #################################
 
 x <- 1:20
