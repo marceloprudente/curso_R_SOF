@@ -5,7 +5,7 @@ Lembre-se de carregar o pacote *tidyverse*.
 
 ## Exercício 1:
 
-Com banco de alunos do Censo Escolar:
+Com banco de alunos do Censo Ensino Superior:
 - encontre o número de alunos matriculados nos nas universidades públicas e privadas por Unidade da Federação. 
 - faça três gráficos:
     + um gráfico de barras com o total de alunos matriculados por UF. 
