@@ -53,7 +53,7 @@ library(PNADcIBGE)
 
 ```{r eval = FALSE}
 # Especifica o ano e o trimestre
-pnadc = get_pnadc(year = 2017, quarter = 4)
+pnadc = get_pnadc(year = 2019, quarter = 4)
 class(pnadc)
 
 ```
@@ -121,7 +121,7 @@ Calcula os valores totais de uma variável em surveys complexos.
 
 - **Algumas estimativas**:
 ```{r eval = FALSE}
-# população estimada do Brasil em 2017
+# população estimada do Brasil em 2019
 pnadc %>% 
   mutate(one = 1) %>% 
   summarise(pop_brasil = survey_total(one))
@@ -353,9 +353,9 @@ library(convey); library(knitr); library(kableExtra)
 ```{r message=FALSE, warning=FALSE}
 # fixar diretório
 setwd("C:/curso_r/dados/PNADC")
-pnadc <- read_pnadc("PNADC_2017_entr1_20180426.txt", "Input_PNADC_1entr_2017_20180426.txt")
-pnadc <- pnadc_labeller(pnadc, "dicionario_PNAD_CONTINUA_MICRODADOS_1_visita_2017_20180426.xls")
-deflator <- readxl::read_excel("deflator_2017_pnadc.xls")
+pnadc <- read_pnadc("PNADC_2019_entr1.txt", "Input_PNADC_1entr_2019.txt")
+pnadc <- pnadc_labeller(pnadc, "dicionario_PNAD_CONTINUA_MICRODADOS_1_visita_2019.xls")
+deflator <- readxl::read_excel("deflator_2019_pnadc.xls")
 ```
 
 
